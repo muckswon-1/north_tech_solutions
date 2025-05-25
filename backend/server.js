@@ -277,7 +277,7 @@ app.post("/mucks/schedule-meeting", async (req, res) => {
 
 
 // TEST ROUTE
-app.get('/', (req, res) => {
+app.get('/mucks', (req, res) => {
     res.send('Back end server is running!');
 });
 
