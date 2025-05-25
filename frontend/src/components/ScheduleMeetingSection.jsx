@@ -64,7 +64,7 @@ const ScheduleMeetingSection = () => {
 
 
     const initiateOAuthFlow = () => {
-        const oauthUrl = `http://localhost:2070/mucks/auth/google`;
+        const oauthUrl = `https://northtechsolutions.muckswon.com/mucks/auth/google`;
         window.location.href = oauthUrl;
     }
 
