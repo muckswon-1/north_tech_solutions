@@ -1,8 +1,8 @@
 //import { google } from "googleapis";
 import React, { useEffect, useState } from "react";
-const client_id = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-const client_secret = import.meta.env.VITE_GOOGLE_CLIENT_SECRET;
-const redirect_uri = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
+import axios from "axios";
+
+
 
 
 
@@ -17,7 +17,7 @@ const ScheduleMeetingSection = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
-  const [accessToken, setAccessToken] = useState(null);
+  const [isAuthenticated, setIsauthenticated] = useState(false);
 
 
   const handleChange = (e) => {
@@ -25,169 +25,74 @@ const ScheduleMeetingSection = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setIsLoading(true);
-//     setError("");
-//     setIsSuccess(false);
 
-    // try {
-    //   // Simulate Google Meet link generation
-    //   // const googleMeetLink = `https://meet.google.com/abc- ${Math.random().toString(36).substring(7)}`;
-
-    //   // Simulate sending an email with the meeting link
-    // //   setTimeout(() => {
-    // //     console.log(`Meeting scheduled for ${formData.meetingDate} at ${formData.meetingTime}`);
-    // //     console.log(`Meeting link: ${googleMeetLink}`);
-    // //     console.log(`Email sent to ${formData.email}`);
-    // //     setIsLoading(false);
-    // //     setIsSuccess(true);
-    // //   }, 1500);
-
-    // const oauth2Client  = new google.auth.OAuth2(client_id, client_secret, redirect_uri);
-    
-    // } catch (err) {
-    //   setError("An error occurred while scheduling the meeting. Please try again.");
-    //   setIsLoading(false);
-    // }
-  //};
-
-//   const fetchTokens = async (authCode) => {
-//     try {
-//         const response = await fetch('https://oauth2.googleapis.com/token', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/x-www-form-urlencoded',
-//             },
-//             body: JSON.stringify({
-//                 code: authCode,
-//                 client_id: client_id,
-//                 client_secret: client_secret,
-//                 redirect_uri: redirect_uri,
-//                 grant_type: 'authorization_code',
-//             }),
-//         });
-
-//         const tokes = await response.json();
-
-//         if(tokes.error) {
-//             throw new Error(tokes.error_description || "Failed to fetch tokens");
-//         }
-
-//         console.log(`Access Token: ${tokes.access_token}`);
-//         console.log(`Refresh Token: ${tokes.refresh_token}`);
-
-//         setAccessToken(tokes.access_token);
-
-//         localStorage.setItem('refresh_token', tokes.refresh_token);
-
-
-//     } catch (error) {
-//         console.error('Error fetching tokens:', error);
-//         setError('Failed to authenticate with Google. Please try again.');
-//     }
-//   }
-
-//   useEffect(() => {
-//     const urlParams = new URLSearchParams(window.location.search);
-//     const authCode = urlParams.get('code');
-
-//     if (authCode) {
-//       fetchTokens(authCode);
-//     }
-//   }, []);
-
-
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
     setIsSuccess(false);
 
-
     try {
-        const oauth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uri);
+      // Fetch access token using refresh token
+      const refreshToken = localStorage.getItem("google_refresh_token");
 
-        const refresh_token = localStorage.getItem('refresh_token');
+      if(!refreshToken){
+        throw new Error("No refresh token found");
+        
+      }
 
-        if(!refresh_token) {
-            throw new Error('No refresh token found');
-        }
+      // call the back end to fetch a new access token
+      const response = await axios.post ("http://localhost:2070/mucks/schedule-meeting",{...formData});
 
-      const tokens = await oauth2Client.refreshAccessToken({refresh_token});
-      oauth2Client.setCredentials(tokens.credentials);
-
-
-     const calendar = google.calendar({version: 'v3', auth: oauth2Client});
-
-     const startTime = new Date(formData.meetingDate + 'T' + formData.meetingTime + ':00');
-     const endTime = new Date(startTime.getTime() + 30 * 60000);
-
-     const event = {
-        summary: `Meeting with ${formData.name}`,
-        description: `Business Type: ${formData.businessType}`,
-        start: {
-            dateTime: startTime.toISOString(),
-            timeZone: 'Asia/Kolkata',
-        },
-        end: {
-            dateTime: endTime.toISOString(),
-            timeZone: 'Asia/Kolkata',
-        },
-        attendies: [
-            {email: formData.email},
-        ],
-        reminders: {
-            useDefault: false,
-            overrides: [
-                {method: 'email', minutes: 24 * 60},
-                {method: 'popup', minutes: 10},
-            ],
-        },
-     };
-
-     const response = await calendar.events.insert({
-        calendarId: 'primary',
-        resource: event,
-     });
-
-     //Confirm success
-     console.log("Event created", response.data.htmlLink);
-     setIsLoading(false);
-     setIsSuccess(true);
-
-
-      
-
-
-    }catch(err){
-        console.error("Error scheduling meeting: ", err);
-        setError("An error occurred while scheduling the meeting. Please try again.");
+      if(response.status === 200){
+        
+        setIsSuccess(true);
         setIsLoading(false);
-        setIsSuccess(false);
+
+      }
+
+    
+
+
+
+    } catch (error) {
+      
     }
 
     };
 
 
     const initiateOAuthFlow = () => {
-        const oauthUrl = `https://accounts.google.com/o/oauth2/auth?scope=https ://www.googleapis.com/auth/calendar&access_type=offline&include_granted_scopes=true&response_type=code&state=security_token&redirect_uri=${encodeURIComponent(redirect_uri)}&client_id=${encodeURIComponent(client_id)}`;
+        const oauthUrl = `http://localhost:2070/mucks/auth/google`;
         window.location.href = oauthUrl;
     }
+
+    useEffect(() => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const checkAuth = urlParams.get("authenticated");
+
+      if(checkAuth === "true"){
+        setIsauthenticated(true);
+      }
+
+      window.history.replaceState({}, document.title, '/');
+
+    },[])
+
 
   return (
     <section id="schedule-meeting" className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-100">
     <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Schedule a Meeting</h2>
       {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-      {!accessToken ? (
+      {!isAuthenticated ? (
         <div className="text-center">
           <p className="text-gray-700 mb-4">
             To schedule a meeting, you need to authenticate with Google.
           </p>
           <button
-            // onClick={initiateOAuthFlow}
-            onClick={() => {}}
+             onClick={initiateOAuthFlow}
             className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Authenticate with Google
