@@ -59,9 +59,9 @@ app.get("/mucks/oauth/google/callback", async (req, res) => {
        // process.env.GOOGLE_REFRESH_TOKEN = tokens.refresh_token;
        if(refreshToken){
         console.log(`Your refresh token is: ${refreshToken}`)
-        res.redirect(`https://northtechsolutions.muckswon.com/?authenticated=true`);
+        res.redirect(`http://localhost:5173/?authenticated=true`);
        }else{
-        res.redirect(`https://northtechsolutions.muckswon.com/?authenticated=false`);
+        res.redirect(`http://localhost:5173/?authenticated=false`);
        }
 
 

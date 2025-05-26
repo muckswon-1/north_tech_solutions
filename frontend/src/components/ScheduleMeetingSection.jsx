@@ -52,9 +52,6 @@ const ScheduleMeetingSection = () => {
 
       }
 
-    
-
-
 
     } catch (error) {
       
@@ -64,8 +61,9 @@ const ScheduleMeetingSection = () => {
 
 
     const initiateOAuthFlow = () => {
-        const oauthUrl = `https://northtechsolutions.muckswon.com/mucks/auth/google`;
+        const oauthUrl = `http://localhost:2070/mucks/auth/google`;
         window.location.href = oauthUrl;
+        window.history.replaceState({}, document.title, '/');
     }
 
     useEffect(() => {
