@@ -3,8 +3,8 @@
 const envFile = `.env.${process.env.NODE_ENV || 'development'}`;
 require('dotenv').config({ path: envFile });
 
-const {authUrl, oauth2Client} = require('./google_auth');
-const googleCalender = require('./calendar');
+const {authUrl, oauth2Client} = require('../google_auth');
+const googleCalender = require('../calendar');
 
 //express config
 const express = require('express');
