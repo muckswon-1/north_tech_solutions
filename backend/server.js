@@ -97,5 +97,5 @@ app.post("/mucks/schedule-meeting", async (req, res) => {
 
 // START SERVER 
 app.listen(port, () => {
-    console.log(`Example app listening on http://localhost:${port}`);
+    console.log(`Example app listening on ${process.env.BACKEND_URL}`);
 });
