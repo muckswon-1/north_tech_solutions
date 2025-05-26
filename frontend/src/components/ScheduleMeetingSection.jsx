@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 
 
@@ -43,7 +43,7 @@ const ScheduleMeetingSection = () => {
       }
 
       // call the back end to fetch a new access token
-      const response = await axios.post ("http://localhost:2070/mucks/schedule-meeting",{...formData});
+      const response = await axios.post (`${backendUrl}/mucks/schedule-meeting`,{...formData});
 
       if(response.status === 200){
         
@@ -54,16 +54,15 @@ const ScheduleMeetingSection = () => {
 
 
     } catch (error) {
-      
+      console.error('Error scheduling meeting', error)
     }
 
     };
 
 
     const initiateOAuthFlow = () => {
-        const oauthUrl = `http://localhost:2070/mucks/auth/google`;
+        const oauthUrl = `${backendUrl}/mucks/auth/google`;
         window.location.href = oauthUrl;
-        window.history.replaceState({}, document.title, '/');
     }
 
     useEffect(() => {
