@@ -4,7 +4,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "format": "prettier --write ."
   },
   "keywords": [],
   "author": "",
@@ -18,5 +19,8 @@
     "luxon": "^3.6.1",
     "nodemailer": "^7.0.3",
     "nodemon": "^3.1.10"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3"
   }
 }
