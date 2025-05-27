@@ -40,16 +40,18 @@ app.get("/mucks/oauth/google/callback", async (req, res) => {
         const {code} = req.query; // extract authorization code from the query string
 
         const {tokens} = await oauth2Client.getToken(code);
+
+        console.log('tokens',tokens);
+
         oauth2Client.setCredentials(tokens);
-       
 
-          const refreshToken = tokens.refresh_token
 
-       if(refreshToken){
-        res.redirect(`${process.env.FRONTEND_URL}/?authenticated=true`);
-       }else{
-        res.redirect(`${process.env.FRONTEND_URL}/?authenticated=false`);
-       }
+          const accessToken = tokens.access_token
+          const isAuthenticated = tokens.access_token ? true : false;
+
+          res.redirect(`${process.env.FRONTEND_URL}/?authenticated=${isAuthenticated}`)
+
+    
 
 
     } catch (error) {

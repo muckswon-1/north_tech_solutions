@@ -4,8 +4,6 @@ import axios from "axios";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-
-
 const ScheduleMeetingSection = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -34,13 +32,7 @@ const ScheduleMeetingSection = () => {
     setIsSuccess(false);
 
     try {
-      // Fetch access token using refresh token
-      const refreshToken = localStorage.getItem("google_refresh_token");
-
-      if(!refreshToken){
-        throw new Error("No refresh token found");
-        
-      }
+      
 
       // call the back end to fetch a new access token
       const response = await axios.post (`${backendUrl}/mucks/schedule-meeting`,{...formData});
@@ -51,7 +43,6 @@ const ScheduleMeetingSection = () => {
         setIsLoading(false);
 
       }
-
 
     } catch (error) {
       console.error('Error scheduling meeting', error)
