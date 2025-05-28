@@ -32,7 +32,7 @@ const ScheduleMeetingSection = () => {
     try {
       // call the back end to fetch a new access token
       const response = await axios.post(
-        `${backendUrl}/api.b2b.muckswon.com/schedule-meeting`,
+        `${backendUrl}/schedule-meeting`,
         { ...formData },
       );
 
@@ -46,7 +46,7 @@ const ScheduleMeetingSection = () => {
   };
 
   const initiateOAuthFlow = () => {
-    const oauthUrl = `${backendUrl}/api.b2b.muckswon.com/auth/google`;
+    const oauthUrl = `${backendUrl}/auth/google`;
     window.location.href = oauthUrl;
   };
 

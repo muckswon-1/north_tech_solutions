@@ -24,12 +24,12 @@ app.get("/", (req, res) => {
 });
 
 // INITIATE AUTH FLOW
-app.get("/api.b2b.muckswon.com/auth/google", (req, res) => {
+app.get("/auth/google", (req, res) => {
   res.redirect(authUrl);
 });
 
 // HANDLE REDIRECT
-app.get("/api.b2b.muckswon.com/oauth/google/callback", async (req, res) => {
+app.get("/oauth/google/callback", async (req, res) => {
   try {
     const { code } = req.query; // extract authorization code from the query string
 
@@ -51,7 +51,7 @@ app.get("/api.b2b.muckswon.com/oauth/google/callback", async (req, res) => {
 });
 
 // ROUTE FOR SCHEDULING MEETINGS
-app.post("/api.b2b.muckswon.com/schedule-meeting", async (req, res) => {
+app.post("/schedule-meeting", async (req, res) => {
   try {
     const meetingData = req.body;
 
