@@ -46,7 +46,7 @@ const ScheduleMeetingSection = () => {
   };
 
   const initiateOAuthFlow = () => {
-    const oauthUrl = `${backendUrl}/mucks/auth/google`;
+    const oauthUrl = `${backendUrl}/b2bapi/auth/google`;
     window.location.href = oauthUrl;
   };
 

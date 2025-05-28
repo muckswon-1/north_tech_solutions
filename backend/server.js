@@ -19,17 +19,17 @@ app.use(express.urlencoded({ extended: true }));
 const port = process.env.SERVER_PORT || 3000;
 
 // TEST ROUTE
-app.get("/mucks", (req, res) => {
+app.get("/", (req, res) => {
   res.send("Back end server is running!");
 });
 
 // INITIATE AUTH FLOW
-app.get("/mucks/auth/google", (req, res) => {
+app.get("/b2bapi/auth/google", (req, res) => {
   res.redirect(authUrl);
 });
 
 // HANDLE REDIRECT
-app.get("/mucks/oauth/google/callback", async (req, res) => {
+app.get("/b2bapi/oauth/google/callback", async (req, res) => {
   try {
     const { code } = req.query; // extract authorization code from the query string
 
@@ -51,7 +51,7 @@ app.get("/mucks/oauth/google/callback", async (req, res) => {
 });
 
 // ROUTE FOR SCHEDULING MEETINGS
-app.post("/mucks/schedule-meeting", async (req, res) => {
+app.post("/b2bapi/schedule-meeting", async (req, res) => {
   try {
     const meetingData = req.body;
 
