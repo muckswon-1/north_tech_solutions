@@ -1,20 +1,34 @@
 import './App.css';
-import HeroSection from './components/HeroSection';
-import FeaturesSection from './components/FeaturesSection';
-import ScheduleMeetingSection from './components/ScheduleMeetingSection';
-import FooterSection from './components/FooterSection';
+import FeaturesSection from './components/Layout/FeaturesSection';
+import ScheduleMeetingSection from './components/ScheduleMeeting/ScheduleMeetingSection';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ProductDetailsPage from './components/ProductCatalog/ProductDetailsPage';
+import ProductCatalogPage from './components/ProductCatalog/ProductCatalogPage';
+import Layout from './components/Layout/Layout';
 
 function App() {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   console.log(backendUrl);
 
   return (
-    <>
-      <HeroSection />
-      <FeaturesSection />
-      <ScheduleMeetingSection />
-      <FooterSection />
-    </>
+    <Router>
+      <Layout>
+        <Routes>
+          <Route path="/" element={
+            <>
+             <FeaturesSection />
+             <ScheduleMeetingSection />
+            
+            </>
+          } />
+
+          <Route path="/products" element={<ProductCatalogPage />} />
+          <Route path="/product/:id" element={<ProductDetailsPage />} />
+          
+        </Routes>
+      </Layout>
+    </Router>
+
   );
 }
 

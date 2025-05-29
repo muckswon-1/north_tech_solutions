@@ -1,6 +1,18 @@
+import { Link } from "react-router-dom";
+
+
 const HeroSection = () => {
   return (
     <header className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-20 px-4 sm:px-6 lg:px-8">
+
+      {/* Navigation */}
+       <nav className="absolute top-4 right-8 flex space-x-4">
+    <Link to="/" className="px-4 py-2 hover:underline">Home</Link>
+    <Link to="/products" className="px-4 py-2 hover:underline">Products</Link>
+  </nav>
+
+  
+
       <div className="max-w-7xl mx-auto text-center">
         {/* Logo and Company Name */}
         <div className="flex flex-col items-center justify-center mb-8">
