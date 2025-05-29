@@ -4,12 +4,15 @@ const ProductDetailsPage = () => {
     const {id} = useParams();
 
     const product = mockProducts.filter(mockProduct => mockProduct.id === parseInt(id))[0];
-    
 
+    console.log(product);
+ 
+    
     if(!product) {
         return <div className="text-center mt-10 text-red-600">Product not found.</div>;
     }
 
+  
     return (
         <div className="container mx-auto p-6">
           <h1 className="text-3xl font-bold mb-4">{product.name}</h1>

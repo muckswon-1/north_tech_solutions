@@ -3,9 +3,14 @@ export const mockProducts = [
         id: 1,
         image:"https://images.pexels.com/photos/5974048/pexels-photo-5974048.jpeg",
         name: "Industrial drill",
-
         description: "High performance drill with long lasting battery",
-        price: 120.50
+        price: 120.50,
+        specs: {
+            weight: '5kg',
+            power: '1200w',
+            battery: 'Li-Ion'
+          }
+
     },
 
     {

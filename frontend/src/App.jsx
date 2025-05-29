@@ -23,7 +23,7 @@ function App() {
           } />
 
           <Route path="/products" element={<ProductCatalogPage />} />
-          <Route path="/product/:id" element={<ProductDetailsPage />} />
+          <Route path="/products/:id" element={<ProductDetailsPage />} />
           
         </Routes>
       </Layout>
