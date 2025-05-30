@@ -1,6 +1,18 @@
+import { Link } from "react-router-dom";
+import NavBar from "./NavBar";
+
+
 const HeroSection = () => {
   return (
     <header className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-20 px-4 sm:px-6 lg:px-8">
+
+      {/* Navigation */}
+      <NavBar />
+
+      {/* Hero Content */}
+
+
+
       <div className="max-w-7xl mx-auto text-center">
         {/* Logo and Company Name */}
         <div className="flex flex-col items-center justify-center mb-8">
@@ -22,7 +34,7 @@ const HeroSection = () => {
             />
           </svg>
           {/* Company Name */}
-          <h2 className="text-2xl font-bold text-white">NorthTechSolutions</h2>
+          <h2 className="text-2xl font-bold text-white">Sokoni</h2>
         </div>
 
         {/* Main Content */}
