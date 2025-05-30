@@ -12,9 +12,12 @@ const Layout = ({children}) => {
     
     
     return (
-        <div>
+        <div className='min-h-screen flex flex-col'>
             {pathname === "/" ? <HeroSection /> : <Header />}
-            {children}
+            <main className='flex-1'>
+                {children}
+            </main>
+            
             <FooterSection />
         </div>
     );

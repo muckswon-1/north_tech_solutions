@@ -4,8 +4,7 @@ const FooterSection = () => {
       <div className="max-w-7xl mx-auto text-center">
         {/* Copyright Information */}
         <p className="text-sm">
-          &copy; {new Date().getFullYear()} NorthTechSolutions. All rights
-          reserved.
+          &copy; {new Date().getFullYear()} Karibu Sokoni
         </p>
       </div>
     </footer>
