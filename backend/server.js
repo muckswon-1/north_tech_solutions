@@ -1,27 +1,39 @@
+const express = require("express");
+const app = express();
+const cors = require("cors");
+
+//Morgan for HTTP logging
+const morgan = require("morgan");
+
+// import modules
+const { authUrl, oauth2Client } = require("./google_auth");
+const googleCalender = require("./calendar");
+const ProductRouter = require("./src/routes/productRoutes");
+const InquiryRouter = require("./src/routes/inquiryRoutes");
+
 //Load environemt file based on NODE_ENV
 const envFile = `.env.${process.env.NODE_ENV || "development"}`;
 require("dotenv").config({ path: envFile });
 
-const { authUrl, oauth2Client } = require("./google_auth");
-const googleCalender = require("./calendar");
-
-//express config
-const express = require("express");
-const app = express();
-const cors = require("cors");
+//Global Constant variables
+const port = process.env.SERVER_PORT || 3000;
 
 //  MIDDLEWARE
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// PORT
-const port = process.env.SERVER_PORT || 3000;
+app.use(morgan("dev"));
 
 // TEST ROUTE
 app.get("/", (req, res) => {
   res.send("Back end server is running!");
 });
+
+// PRODUCT ROUTES
+app.use("/sokoni-api/products", ProductRouter);
+
+//INQUIRY ROUTES
+app.use("/sokoni-api/inquiry", InquiryRouter);
 
 // INITIATE AUTH FLOW
 app.get("/auth/google", (req, res) => {
@@ -97,5 +109,7 @@ app.post("/schedule-meeting", async (req, res) => {
 
 // START SERVER
 app.listen(port, () => {
-  console.log(`Example app listening on ${process.env.BACKEND_URL} port ${port}`);
+  console.log(
+    `Example app listening on ${process.env.BACKEND_URL} port ${port}`,
+  );
 });

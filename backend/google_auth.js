@@ -1,11 +1,6 @@
 //google auth
 const { google } = require("googleapis");
 
-const envFile = `.env.${process.env.NODE_ENV || "development"}`;
-require("dotenv").config({ path: envFile });
-
-console.log(  process.env.REDIRECT_URL);
-
 // GOOGLE OAUTH CONFIGURATION
 const OAuth2 = google.auth.OAuth2;
 const oauth2Client = new OAuth2(
