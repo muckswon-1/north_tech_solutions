@@ -2,105 +2,107 @@ import React, { useState } from 'react';
 import { useInquiry } from '../context/InquiryContext';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import validator from 'validator'
-
+import validator from 'validator';
 
 //Suggested improvement - customer to opt to schedule a google meet on inquiry submission
 
-
 const InquiryPage = () => {
-    const {inquiryItems, removeFromInquiry, clearInquiry, submitInquiry } = useInquiry();
-    const [formData, setFormData] = useState({
-      companyName:'',
-      businessType: '',
-      contactName: '',
-      contactPhone: '',
-      contactEmail: '',
-      message: ''
-    });
+  const { inquiryItems, removeFromInquiry, clearInquiry, submitInquiry } =
+    useInquiry();
+  const [formData, setFormData] = useState({
+    companyName: '',
+    businessType: '',
+    contactName: '',
+    contactPhone: '',
+    contactEmail: '',
+    message: '',
+  });
 
-    const handleInputChange = (e) => {
-      const {name, value} = e.target;
-      setFormData({...formData, [name]: value});
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  //validate form
+  const validateForm = () => {
+    if (
+      !formData.companyName ||
+      !formData.businessType ||
+      !formData.contactName ||
+      !formData.contactEmail
+    ) {
+      toast.error('Please fill in all fields');
+      return false;
     }
 
-    //validate form
-    const validateForm = () => {
-      if(!formData.companyName || !formData.businessType || !formData.contactName  || !formData.contactEmail){
-        toast.error("Please fill in all fields");
-        return false;
-      }
-
-      if(!validator.isEmail(formData.contactEmail)){
-        toast.error("Please enter a valid email address");
-        return false;
-      }
-
-      // if(!validator.isMobilePhone(formData.contactPhone,['KE'])){
-      //   toast.error("Please enter a valid phone number");
-      //   return false;
-      // }
-      return true;
+    if (!validator.isEmail(formData.contactEmail)) {
+      toast.error('Please enter a valid email address');
+      return false;
     }
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      if(!validateForm()) return;
+    // if(!validator.isMobilePhone(formData.contactPhone,['KE'])){
+    //   toast.error("Please enter a valid phone number");
+    //   return false;
+    // }
+    return true;
+  };
 
-      //Simulate submission
-      const response = await submitInquiry(inquiryItems, formData);
-      if(response){
-        setFormData({
-          companyName:'',
-          businessType: '',
-          contactName: '',
-          contactPhone: '',
-          contactEmail: '',
-          message: ''
-        })
-      }
-      
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    //Simulate submission
+    const response = await submitInquiry(formData);
+    if (response) {
+      setFormData({
+        companyName: '',
+        businessType: '',
+        contactName: '',
+        contactPhone: '',
+        contactEmail: '',
+        message: '',
+      });
     }
+  };
 
-    if(!inquiryItems.length){
-      return (
-        <div className="max-w-4xl mx-auto p-4">
-          <h1 className="text-2xl font-bold mb-4">My Inquiry List</h1>
-          <p>No inquiries found.</p>
- <Link
-            to="/products"
-            className="mt-4 inline-block bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 transition duration-300"
- >
- Go to Products
- </Link>
-
-    </div>)
-    }
-
-
+  if (!inquiryItems.length) {
     return (
-      
-<div className="max-w-4xl mx-auto p-4">
+      <div className="max-w-4xl mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4">My Inquiry List</h1>
+        <p>No inquiries found.</p>
+        <Link
+          to="/products"
+          className="mt-4 inline-block bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 transition duration-300"
+        >
+          Go to Products
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">My Inquiry List</h1>
 
-      
-        <div className="border rounded p-4 mb-4">
-          {inquiryItems.map((item) => (
-            <div key={item.id} className="flex justify-between items-center border-b py-2">
-              <div>
-                <p className="font-medium">{item.name}</p>
-                <p>Quantity: {item.quantity}</p>
-              </div>
-              <button
-                onClick={() => removeFromInquiry(item.id)}
-                className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-              >
-                Remove
-              </button>
+      <div className="border rounded p-4 mb-4">
+        {inquiryItems.map((item) => (
+          <div
+            key={item.id}
+            className="flex justify-between items-center border-b py-2"
+          >
+            <div>
+              <p className="font-medium">{item.name}</p>
+              <p>Quantity: {item.quantity}</p>
             </div>
-          ))}
-        </div>
-      
+            <button
+              onClick={() => removeFromInquiry(item.id)}
+              className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+      </div>
 
       <div className="mb-4">
         <h2 className="text-xl font-semibold mb-2">Submit Your Inquiry</h2>
@@ -189,8 +191,7 @@ const InquiryPage = () => {
         </div>
       </div>
     </div>
-
-     );
-}
+  );
+};
 
 export default InquiryPage;

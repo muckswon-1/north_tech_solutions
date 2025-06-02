@@ -1,17 +1,13 @@
-import { Link } from "react-router-dom";
-import NavBar from "./NavBar";
-
+import { Link } from 'react-router-dom';
+import NavBar from './NavBar';
 
 const HeroSection = () => {
   return (
     <header className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-20 px-4 sm:px-6 lg:px-8">
-
       {/* Navigation */}
       <NavBar />
 
       {/* Hero Content */}
-
-
 
       <div className="max-w-7xl mx-auto text-center">
         {/* Logo and Company Name */}

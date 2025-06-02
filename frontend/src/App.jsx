@@ -5,34 +5,35 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProductDetailsPage from './pages/ProductDetailsPage';
 import ProductCatalogPage from './pages/ProductCatalogPage';
 import Layout from './components/Layout/Layout';
-import { InquiryProvider,InquiryContext } from './context/InquiryContext';
+import { InquiryProvider, InquiryContext } from './context/InquiryContext';
 import InquiryPage from './pages/InquiryPage';
-import { Toaster} from "react-hot-toast"
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   return (
     <InquiryProvider>
-    <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={
-            <>
-             <FeaturesSection />
-             <ScheduleMeetingSection />
-            
-            </>
-          } />
+      <Router>
+        <Layout>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  <FeaturesSection />
+                  <ScheduleMeetingSection />
+                </>
+              }
+            />
 
-          <Route path="/products" element={<ProductCatalogPage />} />
-          <Route path="/products/:id" element={<ProductDetailsPage />} />
-          <Route path='/inquiry' element={<InquiryPage />} />
-          
-        </Routes>
-      </Layout>
-    </Router>
-    <Toaster position='top-right' reverseOrder={false} />
+            <Route path="/products" element={<ProductCatalogPage />} />
+            <Route path="/products/:id" element={<ProductDetailsPage />} />
+            <Route path="/inquiry" element={<InquiryPage />} />
+          </Routes>
+        </Layout>
+      </Router>
+      <Toaster position="top-right" reverseOrder={false} />
     </InquiryProvider>
   );
 }

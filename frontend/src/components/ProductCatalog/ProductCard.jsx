@@ -1,13 +1,13 @@
-import React from 'react';  
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 const ProductCard = ({ product }) => {
-  const { id, image, name, description, price } = product;
+  const { id, image_url, name, description, price } = product;
 
   return (
     <div className="bg-white rounded-lg shadow hover:shadow-lg transition duration-300 p-4 flex flex-col justify-between">
       <img
-        src={image}
+        src={image_url}
         alt={name}
         className="w-full h-48 object-cover rounded-t-lg"
       />

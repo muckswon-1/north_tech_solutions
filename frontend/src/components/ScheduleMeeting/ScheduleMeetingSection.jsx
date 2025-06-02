@@ -31,10 +31,9 @@ const ScheduleMeetingSection = () => {
 
     try {
       // call the back end to fetch a new access token
-      const response = await axios.post(
-        `${backendUrl}/schedule-meeting`,
-        { ...formData },
-      );
+      const response = await axios.post(`${backendUrl}/schedule-meeting`, {
+        ...formData,
+      });
 
       if (response.status === 200) {
         setIsSuccess(true);

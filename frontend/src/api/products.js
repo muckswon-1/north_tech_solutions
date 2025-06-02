@@ -1,23 +1,26 @@
-import mockData from "../db/mockdata.json";
+import axios from 'axios';
 
+const productsEndpoint = `${import.meta.env.VITE_BACKEND_URL}/sokoni-api/products`;
 
-//simulate a network call with a delay
-export const fetchProducts = () => {
-    return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(mockData);
-    }, 1000);
-  });
-
-}
+export const fetchProducts = async () => {
+  try {
+    const response = await axios.get(productsEndpoint);
+    return response.data;
+  } catch (error) {
+    //TODO - send front end errors to the server and handle errors
+    console.log(error);
+    return [];
+  }
+};
 
 //fetch by id
-export const fetchProductById = (id) => {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            const product = mockData.find((product) => product.id === parseInt(id));
-            resolve(product);
-            }, 1000);
-        
-        })
-}
+export const fetchProductById = async (id) => {
+  try {
+    const response = await axios.get(`${productsEndpoint}/${id}`);
+
+    return response.data[0];
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
