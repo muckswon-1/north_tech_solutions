@@ -85,7 +85,10 @@ const InquiryPage = () => {
       <h1 className="text-2xl font-bold mb-4">My Inquiry List</h1>
 
       <div className="border rounded p-4 mb-4">
-        {inquiryItems.map((item) => (
+        {inquiryItems.map((item) => {
+          console.log(item);
+          return (
+          
           <div
             key={item.id}
             className="flex justify-between items-center border-b py-2"
@@ -101,7 +104,7 @@ const InquiryPage = () => {
               Remove
             </button>
           </div>
-        ))}
+        )})}
       </div>
 
       <div className="mb-4">
