@@ -10,9 +10,9 @@ const { authUrl, oauth2Client } = require("./google_auth");
 const googleCalender = require("./calendar");
 const ProductRouter = require("./src/routes/productRoutes");
 const InquiryRouter = require("./src/routes/inquiryRoutes");
+const envFile = require("./src/config/envConfig");
 
-//Load environemt file based on NODE_ENV
-const envFile = `.env.${process.env.NODE_ENV || "development"}`;
+
 require("dotenv").config({ path: envFile });
 
 //Global Constant variables
