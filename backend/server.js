@@ -1,6 +1,7 @@
-const express = require("express");
+const express = require('express');
 const app = express();
 const cors = require("cors");
+const cookieParser = require('cookie-parser');
 
 //Morgan for HTTP logging
 const morgan = require("morgan");
@@ -11,6 +12,8 @@ const googleCalender = require("./calendar");
 const ProductRouter = require("./src/routes/productRoutes");
 const InquiryRouter = require("./src/routes/inquiryRoutes");
 const envFile = require("./src/config/envConfig");
+const PasswordAuthRouter = require("./src/routes/passwordAuthRoutes");
+
 
 
 require("dotenv").config({ path: envFile });
@@ -19,9 +22,15 @@ require("dotenv").config({ path: envFile });
 const port = process.env.SERVER_PORT || 3000;
 
 //  MIDDLEWARE
-app.use(cors());
+app.use(cors({
+  // a list of origins
+  origin: process.env.FRONTEND_URL,
+
+  credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(morgan("dev"));
 
 // TEST ROUTE
@@ -34,6 +43,9 @@ app.use("/sokoni-api/products", ProductRouter);
 
 //INQUIRY ROUTES
 app.use("/sokoni-api/inquiry", InquiryRouter);
+
+// USER AUTH ROUTES
+app.use("/",PasswordAuthRouter);
 
 // INITIATE AUTH FLOW
 app.get("/auth/google", (req, res) => {

@@ -1,6 +1,7 @@
 import axios from 'axios';
+import sokoniApi from './axiosInstance';
 
-const inquiriesEndpoint = `${import.meta.env.VITE_BACKEND_URL}/sokoni-api/inquiry`;
+const inquiriesEndpoint = `/inquiry`;
 
 // create inquiry
 export const clientCreateInquiry = async (userInfo) => {
@@ -19,8 +20,8 @@ export const clientCreateInquiry = async (userInfo) => {
       userInfo,
       productsInfo,
     };
-
-    const response = await axios.post(inquiriesEndpoint, inquiryData);
+//TODO : check here when you come back
+ const response = await sokoniApi.post(inquiriesEndpoint, inquiryData);
     return response.data;
   } catch (error) {
     console.error('Error creating inquiry:', error);

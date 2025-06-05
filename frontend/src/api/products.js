@@ -1,10 +1,11 @@
-import axios from 'axios';
+import sokoniApi from './axiosInstance'; // Import the configured Axios instance
 
-const productsEndpoint = `${import.meta.env.VITE_BACKEND_URL}/sokoni-api/products`;
+// Define path relative to sokoniApi's baseURL
+const productsBasePath = '/products';
 
 export const fetchProducts = async () => {
   try {
-    const response = await axios.get(productsEndpoint);
+    const response = await sokoniApi.get(productsBasePath);
     return response.data;
   } catch (error) {
     //TODO - send front end errors to the server and handle errors
@@ -16,7 +17,7 @@ export const fetchProducts = async () => {
 //fetch by id
 export const fetchProductById = async (id) => {
   try {
-    const response = await axios.get(`${productsEndpoint}/${id}`);
+    const response = await sokoniApi.get(`${productsBasePath}/${id}`);
 
     return response.data[0];
   } catch (error) {

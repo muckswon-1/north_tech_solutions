@@ -1,19 +1,33 @@
-import './App.css';
+import React, { useEffect } from 'react';
+import { Provider, useDispatch } from 'react-redux';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import store from './app/store';
+import { checkAuthStatus } from './features/auth/authSlice'; // Import the new thunk
+import Layout from './components/Layout/Layout';
+
+// Import your page components
 import FeaturesSection from './components/Layout/FeaturesSection';
 import ScheduleMeetingSection from './components/ScheduleMeeting/ScheduleMeetingSection';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProductDetailsPage from './pages/ProductDetailsPage';
 import ProductCatalogPage from './pages/ProductCatalogPage';
-import Layout from './components/Layout/Layout';
-import { InquiryProvider, InquiryContext } from './context/InquiryContext';
 import InquiryPage from './pages/InquiryPage';
-import { Toaster } from 'react-hot-toast';
+import LoginForm from './components/user/LoginForm';
+import RegisterForm from './components/user/RegisterForm';
+import RequireAuth from './components/user/RequireAuth';
+
 
 function App() {
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  return (
-    <InquiryProvider>
+  // Create a component to wrap routes and dispatch the auth check
+  const AppContent = () => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+      // Dispatch the thunk when the component mounts
+      dispatch(checkAuthStatus());
+    }, [dispatch]); // Dependency array ensures it runs only once on mount
+
+    return (
       <Router>
         <Layout>
           <Routes>
@@ -26,15 +40,21 @@ function App() {
                 </>
               }
             />
-
+            <Route path='/login' element={<LoginForm />} />
+            <Route path='/register' element={<RegisterForm />} />
             <Route path="/products" element={<ProductCatalogPage />} />
             <Route path="/products/:id" element={<ProductDetailsPage />} />
-            <Route path="/inquiry" element={<InquiryPage />} />
+            <Route path="/inquiry" element={<RequireAuth><InquiryPage /></RequireAuth>} />
           </Routes>
         </Layout>
       </Router>
-      <Toaster position="top-right" reverseOrder={false} />
-    </InquiryProvider>
+    );
+  };
+
+  return (
+    <Provider store={store}>
+      <AppContent /> {/* Render the new wrapper component */}
+    </Provider>
   );
 }
 

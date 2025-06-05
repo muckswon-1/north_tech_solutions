@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import { fetchProductById, fetchProducts } from '../api/products';
 
 export const useProducts = () => {

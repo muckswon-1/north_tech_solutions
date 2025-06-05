@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
-import { useInquiry } from '../context/InquiryContext';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import validator from 'validator';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeFromInquiry, submitInquiry } from '../features/inquiry/inquirySlice';
 
 //Suggested improvement - customer to opt to schedule a google meet on inquiry submission
 
 const InquiryPage = () => {
-  const { inquiryItems, removeFromInquiry, clearInquiry, submitInquiry } =
-    useInquiry();
+  const { inquiryItems } = useSelector((state) => state.inquiry);
+
+  const dispatch = useDispatch();
+  
+
   const [formData, setFormData] = useState({
     companyName: '',
     businessType: '',
@@ -51,9 +55,11 @@ const InquiryPage = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    //Simulate submission
-    const response = await submitInquiry(formData);
-    if (response) {
+    
+    try {
+      
+      dispatch(submitInquiry(formData));
+    
       setFormData({
         companyName: '',
         businessType: '',
@@ -62,7 +68,11 @@ const InquiryPage = () => {
         contactEmail: '',
         message: '',
       });
+    } catch (error) {
+      console.log(error);
+      toast.error('Inquiry submission failed');
     }
+    
   };
 
   if (!inquiryItems.length) {
@@ -86,7 +96,7 @@ const InquiryPage = () => {
 
       <div className="border rounded p-4 mb-4">
         {inquiryItems.map((item) => {
-          console.log(item);
+      
           return (
           
           <div
@@ -98,7 +108,7 @@ const InquiryPage = () => {
               <p>Quantity: {item.quantity}</p>
             </div>
             <button
-              onClick={() => removeFromInquiry(item.id)}
+              onClick={() => dispatch(removeFromInquiry(item.id))}
               className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
             >
               Remove
@@ -186,7 +196,7 @@ const InquiryPage = () => {
             Submit Inquiry
           </button>
           <button
-            onClick={clearInquiry}
+            onClick={() => dispatch(clearInquiry())}
             className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
           >
             Clear Inquiry

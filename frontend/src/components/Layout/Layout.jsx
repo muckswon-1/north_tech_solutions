@@ -4,8 +4,11 @@ import FooterSection from './FooterSection';
 import Header from './Header';
 import { useLocation } from 'react-router-dom';
 
+
 const Layout = ({ children }) => {
   const { pathname } = useLocation();
+
+
 
   return (
     <div className="min-h-screen flex flex-col">

@@ -1,18 +1,21 @@
-import React, { useContext, useState } from 'react';
-import { useInquiry } from '../../context/InquiryContext';
+import React, {  useState } from 'react';
+
 import toast from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToInquiry, removeFromInquiry, selectIsInInquiry } from '../../features/inquiry/inquirySlice';
 
 const AddToInquiry = ({ product }) => {
-  const { addToInquiry, isInInquiry, removeFromInquiry } = useInquiry();
   const [quantity, setQuantity] = useState(1);
+  const dispatch = useDispatch()
+  const isInInquiry = useSelector(state => selectIsInInquiry(state, product.id))
 
   const handleAddToInquiry = () => {
-    addToInquiry({ ...product, quantity });
+    dispatch(addToInquiry({ ...product, quantity }));
     toast.success(`${product.name} added to Inquiry.`);
   };
 
   const handleRemoveFromInquiry = () => {
-    removeFromInquiry(product.id);
+    dispatch(removeFromInquiry(product.id));
     toast.error(`${product.name} removed from Inquiry.`);
   };
 
@@ -40,7 +43,7 @@ const AddToInquiry = ({ product }) => {
           Add to Inquiry
         </button>
 
-        {isInInquiry(product.id) && (
+        {isInInquiry && (
           <button
             onClick={handleRemoveFromInquiry}
             className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition"
