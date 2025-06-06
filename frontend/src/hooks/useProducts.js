@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { fetchProductById, fetchProducts } from '../api/products';
 
 export const useProducts = () => {
@@ -22,8 +22,8 @@ export const useProduct = (id) => {
   useEffect(() => {
     fetchProductById(id)
       .then((data) => {
-        console.log(data)
-        setProduct(data)
+        console.log(data);
+        setProduct(data);
       })
       .catch((err) => setError(err))
       .finally(() => setIsLoading(false));

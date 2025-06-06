@@ -20,8 +20,8 @@ export const clientCreateInquiry = async (userInfo) => {
       userInfo,
       productsInfo,
     };
-//TODO : check here when you come back
- const response = await sokoniApi.post(inquiriesEndpoint, inquiryData);
+    //TODO : check here when you come back
+    const response = await sokoniApi.post(inquiriesEndpoint, inquiryData);
     return response.data;
   } catch (error) {
     console.error('Error creating inquiry:', error);

@@ -5,14 +5,14 @@ const verifyToken = require("./verify");
 const InquiryRouter = express.Router();
 
 //get all inquiries
-InquiryRouter.get("/",verifyToken, InquiryController.getAllInquiries);
+InquiryRouter.get("/", verifyToken, InquiryController.getAllInquiries);
 //get inquiry by id
-InquiryRouter.get("/",verifyToken, InquiryController.getInquiryById);
+InquiryRouter.get("/", verifyToken, InquiryController.getInquiryById);
 //create inquiry
-InquiryRouter.post("/", verifyToken,InquiryController.createInquiry);
+InquiryRouter.post("/", verifyToken, InquiryController.createInquiry);
 //update inquiry
-InquiryRouter.put("/",verifyToken, InquiryController.updateInquiry);
+InquiryRouter.put("/", verifyToken, InquiryController.updateInquiry);
 //delete inquiry
-InquiryRouter.delete("/",verifyToken, InquiryController.deleteInquiry);
+InquiryRouter.delete("/", verifyToken, InquiryController.deleteInquiry);
 
 module.exports = InquiryRouter;

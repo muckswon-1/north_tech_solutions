@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import validator from 'validator';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeFromInquiry, submitInquiry, clearInquiry } from '../features/inquiry/inquirySlice';
+import {
+  removeFromInquiry,
+  submitInquiry,
+  clearInquiry,
+} from '../features/inquiry/inquirySlice';
 
 //Suggested improvement - customer to opt to schedule a google meet on inquiry submission
 
@@ -11,7 +15,6 @@ const InquiryPage = () => {
   const { inquiryItems } = useSelector((state) => state.inquiry);
 
   const dispatch = useDispatch();
-  
 
   const [formData, setFormData] = useState({
     companyName: '',
@@ -55,15 +58,10 @@ const InquiryPage = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    
     try {
-      
-     dispatch(submitInquiry(formData))
+      dispatch(submitInquiry(formData));
       toast.success('Inquiry submitted successfully');
-        
-      
-    
-    
+
       setFormData({
         companyName: '',
         businessType: '',
@@ -76,7 +74,6 @@ const InquiryPage = () => {
       console.log(error);
       toast.error('Inquiry submission failed');
     }
-    
   };
 
   if (!inquiryItems.length) {
@@ -100,25 +97,24 @@ const InquiryPage = () => {
 
       <div className="border rounded p-4 mb-4">
         {inquiryItems.map((item) => {
-      
           return (
-          
-          <div
-            key={item.id}
-            className="flex justify-between items-center border-b py-2"
-          >
-            <div>
-              <p className="font-medium">{item.name}</p>
-              <p>Quantity: {item.quantity}</p>
-            </div>
-            <button
-              onClick={() => dispatch(removeFromInquiry(item.id))}
-              className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+            <div
+              key={item.id}
+              className="flex justify-between items-center border-b py-2"
             >
-              Remove
-            </button>
-          </div>
-        )})}
+              <div>
+                <p className="font-medium">{item.name}</p>
+                <p>Quantity: {item.quantity}</p>
+              </div>
+              <button
+                onClick={() => dispatch(removeFromInquiry(item.id))}
+                className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+              >
+                Remove
+              </button>
+            </div>
+          );
+        })}
       </div>
 
       <div className="mb-4">

@@ -8,52 +8,48 @@ import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 
 const LoginForm = () => {
-    const dispatch = useDispatch();
-    const {loading, error, isAuthenticated, user} = useSelector(state => state.auth);
-    const [form, setForm] = useState({
-        email: '',
-        password: ''
+  const dispatch = useDispatch();
+  const { loading, error, isAuthenticated, user } = useSelector(
+    (state) => state.auth,
+  );
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+  });
+
+  console.log(error);
+
+  const navigate = useNavigate();
+
+  const from = useLocation().state?.from?.pathname || '/';
+  const location = useLocation();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({
+      ...form,
+      [name]: value,
     });
+  };
 
-    console.log(error);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(loginUser(form));
+  };
 
-    const navigate = useNavigate();
+  // ⏩ redirect user after successful login
+  useEffect(() => {
+    if(user && isAuthenticated){
+      navigate(from, {replace: true});
+    }
+  }, [user]);
 
-    const from = useLocation().state?.from?.pathname || '/';
-    const location = useLocation();
-    
+  useEffect(() => {
+    dispatch(clearAuthError());
+  }, [location.pathname]);
 
-
-    const handleChange = (e) => {
-        const {name, value} = e.target;
-        setForm({
-            ...form,
-            [name]: value
-        });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        dispatch(loginUser(form));
-    };
-
-
-    // ⏩ redirect user after successful login
-    useEffect(() => {
-        // if(user && isAuthenticated){
-        //   navigate(from, {replace: true});
-        // }
-           
-    },[user]);
-
-    useEffect(() => {
-      dispatch(clearAuthError());
-    },[location.pathname])
-
-   
-    return (
-        
-        <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 space-y-4">
+  return (
+    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 space-y-4">
       <h2 className="text-2xl font-bold">Login</h2>
       <input
         type="email"
@@ -89,8 +85,7 @@ const LoginForm = () => {
         </Link>
       </p>
     </form>
-    );
-}
-
+  );
+};
 
 export default LoginForm;

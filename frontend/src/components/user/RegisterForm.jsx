@@ -2,56 +2,49 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearAuthError, registerUser } from '../../features/auth/authSlice';
-import toast from 'react-hot-toast'
+import toast from 'react-hot-toast';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const RegisterForm = () => {
-    const dispatch = useDispatch();
-    const {loading, error, user} = useSelector(state => state.auth);
-    const navigate = useNavigate();
-    const location = useLocation();
+  const dispatch = useDispatch();
+  const { loading, error, user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const location = useLocation();
 
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+  });
 
-
-    const [form, setForm] = useState({
-        email: '',
-        password: ''
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
     });
+  };
 
-    const handleChange = (e) => {
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value
-        });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    dispatch(registerUser(form));
+    setForm({
+      email: '',
+      password: '',
+    });
+  };
+
+  useEffect(() => {
+    if (user) {
+      navigate('/login');
     }
+  }, [dispatch]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-       
-          dispatch(registerUser(form))
-          setForm({
-            email: '',
-            password: ''
-          });
-    }
+  useEffect(() => {
+    dispatch(clearAuthError());
+  }, [location.pathname]);
 
-    useEffect(() => {
-       
-      if(user){
-        navigate('/login');
-      }
-         
-    },[dispatch])
-
-
-    useEffect(() => {
-      dispatch(clearAuthError())
-    },[location.pathname])
-
-    
-
-    return (
-        <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 space-y-4">
+  return (
+    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 space-y-4">
       <h2 className="text-2xl font-bold">Register</h2>
       <input
         type="email"
@@ -88,7 +81,7 @@ const RegisterForm = () => {
         </a>
       </p>
     </form>
-    );
-}
+  );
+};
 
 export default RegisterForm;

@@ -1,23 +1,27 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToInquiry, removeFromInquiry, selectIsInInquiry } from '../../features/inquiry/inquirySlice';
+import {
+  addToInquiry,
+  removeFromInquiry,
+  selectIsInInquiry,
+} from '../../features/inquiry/inquirySlice';
 import { Link } from 'react-router-dom';
 
 const AddToInquiry = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
-  const dispatch = useDispatch()
-  const isInInquiry = useSelector(state => selectIsInInquiry(state, product.id))
+  const dispatch = useDispatch();
+  const isInInquiry = useSelector((state) =>
+    selectIsInInquiry(state, product.id),
+  );
 
   const handleAddToInquiry = () => {
     dispatch(addToInquiry({ ...product, quantity }));
-   
   };
 
   const handleRemoveFromInquiry = () => {
     dispatch(removeFromInquiry(product.id));
-    
   };
 
   return (
@@ -53,7 +57,12 @@ const AddToInquiry = ({ product }) => {
           </button>
         )}
       </div>
-      <Link to='/inquiry' className='text-sm text-blue-600 hover:underline flex justify-center'>View in Inquiry</Link>
+      <Link
+        to="/inquiry"
+        className="text-sm text-blue-600 hover:underline flex justify-center"
+      >
+        View in Inquiry
+      </Link>
     </div>
   );
 };

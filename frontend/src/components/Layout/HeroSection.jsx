@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import NavBar from './NavBar';
 import sokoniLogo from '../../assets/logo.png';
 
-
 const HeroSection = () => {
   return (
     <header className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-20 px-4 sm:px-6 lg:px-8">
@@ -16,14 +15,14 @@ const HeroSection = () => {
         <div className="flex flex-col items-center justify-center mb-8">
           {/* Placeholder Logo */}
           <div className="flex justify-center items-center mt-4">
-  <Link to="/">
-    <img
-      src={sokoniLogo}
-      alt="Sokoni Logo"
-      className="h-20 w-20 md:h-24 md:w-24 rounded-full object-cover shadow-lg hover:opacity-90 transition-opacity"
-    />
-  </Link>
-</div>
+            <Link to="/">
+              <img
+                src={sokoniLogo}
+                alt="Sokoni Logo"
+                className="h-20 w-20 md:h-24 md:w-24 rounded-full object-cover shadow-lg hover:opacity-90 transition-opacity"
+              />
+            </Link>
+          </div>
         </div>
 
         {/* Main Content */}

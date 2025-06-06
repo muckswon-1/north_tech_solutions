@@ -4,21 +4,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../../features/auth/authSlice'; // Import the async thunk
 import sokoniLogo from '../../assets/logo.png';
 
-
 const NavBar = () => {
- //use redux toolkit to access inquiry items
-  const {inquiryItems} = useSelector(state => state.inquiry);
+  //use redux toolkit to access inquiry items
+  const { inquiryItems } = useSelector((state) => state.inquiry);
   const currentPath = useLocation().pathname;
   const [isSticky, setIsSticky] = useState(false);
   const navbarRef = useRef(null);
   const [navbarBottom, setNavbarBottom] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user} = useSelector(state => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-
-
 
   const handleLogoutButtonClick = async () => {
     setIsMenuOpen(false); // Close mobile menu if open
@@ -30,7 +26,6 @@ const NavBar = () => {
       // Optionally, show a toast notification for logout failure
     }
   };
-
 
   useEffect(() => {
     const navbar = navbarRef.current;
@@ -82,16 +77,18 @@ const NavBar = () => {
               </span>
             )}
           </Link>
-         {
-           user ? ( <button onClick={handleLogoutButtonClick}
-          className="hover:underline">
-            Logout
-          </button>) : (
-            <Link to={"/login"}  className="hover:underline">
-            Login
-          </Link>
-          )
-         }
+          {user ? (
+            <button
+              onClick={handleLogoutButtonClick}
+              className="hover:underline"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link to={'/login'} className="hover:underline">
+              Login
+            </Link>
+          )}
         </div>
         {/* Mobile menu button */}
         <button
@@ -153,16 +150,18 @@ const NavBar = () => {
                   {inquiryItems.length}
                 </span>
               )}
-              </li>
-              <li>
-               { user ? (
-                <button
-                  className="font-bold"
-                  onClick={handleLogoutButtonClick}>
+            </li>
+            <li>
+              {user ? (
+                <button className="font-bold" onClick={handleLogoutButtonClick}>
                   Logout
                 </button>
               ) : (
-                <Link to={'/login'} className="font-bold" onClick={() => setIsMenuOpen(false)}>
+                <Link
+                  to={'/login'}
+                  className="font-bold"
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   Login
                 </Link>
               )}

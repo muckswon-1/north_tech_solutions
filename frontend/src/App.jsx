@@ -16,26 +16,19 @@ import RegisterForm from './components/user/RegisterForm';
 import RequireAuth from './components/user/RequireAuth';
 import { Toaster } from 'react-hot-toast';
 
-
-
-
 function App() {
-
   // Create a component to wrap routes and dispatch the auth check
   const AppContent = () => {
- 
     const dispatch = useDispatch();
-    const {isAuthenticated, user} = useSelector((state) => state.auth);
+    const { isAuthenticated, user } = useSelector((state) => state.auth);
     useEffect(() => {
       // Dispatch the thunk when the component mounts
-    
-      if(user && isAuthenticated){
+
+      if (user && isAuthenticated) {
         dispatch(checkAuthStatus());
       }
 
-        //dispatch(checkAuthStatus());
-  
-      
+      //dispatch(checkAuthStatus());
     }, [dispatch]); // Dependency array ensures it runs only once on mount
 
     return (
@@ -51,11 +44,18 @@ function App() {
                 </>
               }
             />
-            <Route path='/login' element={<LoginForm />} />
-            <Route path='/register' element={<RegisterForm />} />
+            <Route path="/login" element={<LoginForm />} />
+            <Route path="/register" element={<RegisterForm />} />
             <Route path="/products" element={<ProductCatalogPage />} />
             <Route path="/products/:id" element={<ProductDetailsPage />} />
-            <Route path="/inquiry" element={<RequireAuth><InquiryPage /></RequireAuth>} />
+            <Route
+              path="/inquiry"
+              element={
+                <RequireAuth>
+                  <InquiryPage />
+                </RequireAuth>
+              }
+            />
           </Routes>
         </Layout>
       </Router>
@@ -65,7 +65,7 @@ function App() {
   return (
     <Provider store={store}>
       <AppContent /> {/* Render the new wrapper component */}
-      <Toaster position='top-right' reverseOrder={false} />
+      <Toaster position="top-right" reverseOrder={false} />
     </Provider>
   );
 }
