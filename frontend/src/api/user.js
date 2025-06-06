@@ -6,15 +6,16 @@ const authServicePath = "/password-auth";
 export const clientRegister = async (user) => {
     try {
         const response = await sokoniApi.post(`${authServicePath}/register`, { ...user });
+      
         if(response.status === 201){
             return response.data;
         }else {
-            return null
+            throw new Error("User with this email already exists.");
+            
         }
-    
         
     } catch (error) {
-        console.log(error);
+
         throw error;
     
     }
@@ -24,11 +25,14 @@ export const clientLogin = async (credentials) => {
     try {
         
         const response = await sokoniApi.post(`${authServicePath}/login`, credentials);
-        console.log(response);
+        if(response.status === 401){
+            throw new Error('Invalid email or password');
+        }
+        
         return response.data;
         
     } catch (error) {
-        console.log(error);
+        
         throw error;
     
     }
@@ -37,10 +41,17 @@ export const clientLogin = async (credentials) => {
 export const fetchCurrentUser = async () => {
     try {
         const response = await sokoniApi.get(`${authServicePath}/me`);
-        return response.data;
+        // Axios resolves only for 2xx status codes, so response.data should be available.
+        // Assuming a successful response from /me includes a 'user' object.
+        return response.data; // This should ideally contain { user: ... }
     } catch (error) {
-        // This error is expected if user is not authenticated (e.g., 401)
-        // console.log("Fetch current user error (expected if not logged in):", error.response?.data?.message || error.message);
+        if (error.response && error.response.status === 401) {
+            // User is not authenticated. This is an expected scenario for this function.
+            // Return a specific structure indicating no authenticated user.
+            return { user: null };
+        }
+        // For any other errors (network issues, server 500, etc.), re-throw them
+        // so they can be handled by the calling thunk as actual application errors.
         throw error;
     }
 };

@@ -9,10 +9,15 @@ const passwordAuthController =  {
         try {
             const {email, password} = req.body;
         
-            const registredUser = await USER.create({email, password});
-            if(registredUser){
-                res.status(201).json({user: {id: registredUser.id, email: registredUser.email}})
-            } else throw new Error('User registration failed');
+            const registeredUser = await USER.create({email, password});
+
+            if(!registeredUser) {
+                // This means USER.create returned null, indicating the email already exists.
+                return res.status(409).json({message: 'User with this email already exists.'});
+            }
+            if(registeredUser){
+                res.status(201).json({user: {id: registeredUser.id, email: registeredUser.email}})
+            } 
 
         } catch (error) {
             console.log(error);
@@ -23,7 +28,10 @@ const passwordAuthController =  {
         try {
             const {email, password} = req.body;
              const user = await  USER.returnByEmail(email);
-            if(user) {
+             if(!user){
+                return res.status(401).json({message: 'Invalid email or password'});
+             }
+  
                 //compare hashed database password with provided passwrd
                 const isEqualPassword = await  bcrypt.compare(password, user.password);
                 if(isEqualPassword){
@@ -40,10 +48,9 @@ const passwordAuthController =  {
                     })
                      res.status(200).json({message: 'Login successful', user: {id: user.id, email: user.email}} )
             } else {
-                // User not found
-                res.status(401).json({ message: "Invalid email or password" }); // Or 404, but 401 is common to prevent email enumeration
-           }
-       } 
+                res.status(401).json({message: 'Invalid email or password'});
+            }
+       
     } 
     catch (error) {
             console.error("Login error:", error);

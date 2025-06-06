@@ -1,10 +1,11 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../../features/auth/authSlice';
+import { clearAuthError, loginUser } from '../../features/auth/authSlice';
 import { useState } from 'react';
 import { use } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 const LoginForm = () => {
     const dispatch = useDispatch();
@@ -13,11 +14,14 @@ const LoginForm = () => {
         email: '',
         password: ''
     });
-   
+
+    console.log(error);
+
     const navigate = useNavigate();
 
     const from = useLocation().state?.from?.pathname || '/';
-
+    const location = useLocation();
+    
 
 
     const handleChange = (e) => {
@@ -36,14 +40,19 @@ const LoginForm = () => {
 
     // ⏩ redirect user after successful login
     useEffect(() => {
-        if(isAuthenticated) {
-            navigate(from, {replace: true});
-        } 
-    },[ isAuthenticated, navigate, from])
+        // if(user && isAuthenticated){
+        //   navigate(from, {replace: true});
+        // }
+           
+    },[user]);
 
+    useEffect(() => {
+      dispatch(clearAuthError());
+    },[location.pathname])
 
-
+   
     return (
+        
         <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 space-y-4">
       <h2 className="text-2xl font-bold">Login</h2>
       <input

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import validator from 'validator';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeFromInquiry, submitInquiry } from '../features/inquiry/inquirySlice';
+import { removeFromInquiry, submitInquiry, clearInquiry } from '../features/inquiry/inquirySlice';
 
 //Suggested improvement - customer to opt to schedule a google meet on inquiry submission
 
@@ -58,7 +58,11 @@ const InquiryPage = () => {
     
     try {
       
-      dispatch(submitInquiry(formData));
+     dispatch(submitInquiry(formData))
+      toast.success('Inquiry submitted successfully');
+        
+      
+    
     
       setFormData({
         companyName: '',

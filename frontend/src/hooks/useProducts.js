@@ -21,7 +21,10 @@ export const useProduct = (id) => {
 
   useEffect(() => {
     fetchProductById(id)
-      .then((data) => setProduct(data))
+      .then((data) => {
+        console.log(data)
+        setProduct(data)
+      })
       .catch((err) => setError(err))
       .finally(() => setIsLoading(false));
   }, [id]);

@@ -2,6 +2,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { clientCreateInquiry } from '../../api/inquiry';
+import toast from 'react-hot-toast';
 
 export const submitInquiry = createAsyncThunk(
   'inquiry/submitInquiry',
@@ -11,8 +12,7 @@ export const submitInquiry = createAsyncThunk(
       if (!response.inquiryId) {
         throw new Error('Inquiry submission failed');
       }
-      dispatch(clearInquiry());
-    
+      
       return response.inquiryId;
     } catch (error) {
       console.error(error);
@@ -38,19 +38,24 @@ const inquirySlice = createSlice({
 
       if (productExists) {
         productExists.quantity += product.quantity;
+        toast.success('Product quantity updated in inquiry');
       } else {
         state.inquiryItems.push(product);
+        toast.success('Product added to inquiry');
       }
       localStorage.setItem('inquiryItems', JSON.stringify(state.inquiryItems));
+      
     },
     removeFromInquiry: (state, action) => {
       const productId = action.payload;
       state.inquiryItems = state.inquiryItems.filter((item) => item.id !== productId);
       localStorage.setItem('inquiryItems', JSON.stringify(state.inquiryItems));
+      toast.error('Product removed from inquiry');
     },
     clearInquiry: (state) => {
       state.inquiryItems = [];
       localStorage.removeItem('inquiryItems');
+      toast.error('Inquiry cleared');
     },
   },
   extraReducers: (builder) => {
@@ -61,6 +66,8 @@ const inquirySlice = createSlice({
     })
     .addCase(submitInquiry.fulfilled, (state, action) => {
       state.isLoading = false;
+      state.inquiryItems = [];
+      localStorage.removeItem('inquiryItems');
       state.error = null;
     })
     .addCase(submitInquiry.rejected, (state, action) => {

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerUser } from '../../features/auth/authSlice';
+import { clearAuthError, registerUser } from '../../features/auth/authSlice';
 import toast from 'react-hot-toast'
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -9,6 +9,8 @@ const RegisterForm = () => {
     const dispatch = useDispatch();
     const {loading, error, user} = useSelector(state => state.auth);
     const navigate = useNavigate();
+    const location = useLocation();
+
 
 
     const [form, setForm] = useState({
@@ -34,15 +36,19 @@ const RegisterForm = () => {
     }
 
     useEffect(() => {
-        if(user) {
-            navigate('/login');
-        }else {
-            toast.error(error);
-        }
-    },[user])
+       
+      if(user){
+        navigate('/login');
+      }
+         
+    },[dispatch])
 
 
+    useEffect(() => {
+      dispatch(clearAuthError())
+    },[location.pathname])
 
+    
 
     return (
         <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 space-y-4">

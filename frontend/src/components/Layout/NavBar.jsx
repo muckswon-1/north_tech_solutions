@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../../features/auth/authSlice'; // Import the async thunk
+import sokoniLogo from '../../assets/logo.png';
 
 
 const NavBar = () => {
@@ -17,11 +18,13 @@ const NavBar = () => {
   const dispatch = useDispatch();
 
 
+
+
   const handleLogoutButtonClick = async () => {
     setIsMenuOpen(false); // Close mobile menu if open
     try {
       await dispatch(logoutUser()).unwrap(); // Dispatch the async thunk and unwrap the result
-      navigate('/'); // Navigate to home page after successful logout
+      navigate('/login'); // Navigate to home page after successful logout
     } catch (error) {
       console.error('Logout failed:', error);
       // Optionally, show a toast notification for logout failure

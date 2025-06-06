@@ -3,6 +3,7 @@ import React, {  useState } from 'react';
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToInquiry, removeFromInquiry, selectIsInInquiry } from '../../features/inquiry/inquirySlice';
+import { Link } from 'react-router-dom';
 
 const AddToInquiry = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
@@ -11,12 +12,12 @@ const AddToInquiry = ({ product }) => {
 
   const handleAddToInquiry = () => {
     dispatch(addToInquiry({ ...product, quantity }));
-    toast.success(`${product.name} added to Inquiry.`);
+   
   };
 
   const handleRemoveFromInquiry = () => {
     dispatch(removeFromInquiry(product.id));
-    toast.error(`${product.name} removed from Inquiry.`);
+    
   };
 
   return (
@@ -52,6 +53,7 @@ const AddToInquiry = ({ product }) => {
           </button>
         )}
       </div>
+      <Link to='/inquiry' className='text-sm text-blue-600 hover:underline flex justify-center'>View in Inquiry</Link>
     </div>
   );
 };

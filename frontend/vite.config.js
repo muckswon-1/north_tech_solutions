@@ -6,13 +6,9 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   plugins: [tailwindcss(), react()],
   server: {
-    proxy: {
-      '/sokoni-api': {
-        target: 'http://localhost:2070',
-        changeOrigin: true,
-        secure: false,
-        ws: true,
-      },
-    }
+    host: '0.0.0.0',
+    port: '5173',
+    strictPort: true,
+    cors: true,
   }
 });
