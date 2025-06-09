@@ -1,7 +1,7 @@
 const USER = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { get } = require("../routes/productRoutes");
+
 
 const passwordAuthController = {
   register: async (req, res) => {
@@ -43,16 +43,24 @@ const passwordAuthController = {
         // set a cookie
 
         const isProduction = process.env.NODE_ENV === "production";
-        const token = jwt.sign(
-          { id: user.id, role: user.role },
-          process.env.JWT_SECRET,
-          { expiresIn: "1h" },
+        const accessToken = jwt.sign(  { id: user.id, role: user.role },process.env.ACCESS_TOKEN_JWT_SECRET,
+          {expiresIn: 60}
         );
-        res.cookie("accessToken", token, {
+
+        const refreshToken = jwt.sign({id: user.id, role: user.role}, process.env.REFRESH_TOKEN_JWT_SECRET, {expiresIn: '7d'})
+
+        res.cookie('refreshToken', refreshToken, {
+          httpOnly: true,
+          secure: isProduction,
+          sameSite: isProduction ? 'none' :  'lax',
+          maxAge: 7 * 24 * 60 * 60 * 1000
+        })
+
+        res.cookie("accessToken", accessToken, {
           httpOnly: true,
           secure: isProduction, // True in production (HTTPS), false in dev (HTTP)
           sameSite: isProduction ? "none" : "lax", // 'none' for cross-site in prod, 'lax' for dev
-          maxAge: 24 * 60 * 60 * 1000, // 1 day
+          maxAge: 60 * 1000, // 1 day
         });
         res
           .status(200)
@@ -71,6 +79,7 @@ const passwordAuthController = {
     }
   },
   logout: (req, res) => {
+  
     if (!req.cookies.accessToken) {
       return res.status(400).json({ message: "No access token to log out." });
     }
@@ -99,6 +108,32 @@ const passwordAuthController = {
       return res.status(500).json({ message: error.message });
     }
   },
+  getNewAccessToken: async (req,res)  => {
+    const token = req.cookies.refreshToken;
+    if(!token) return res.status(401).json({message: "Missing Refresh Token"});
+
+    jwt.verify(token, process.env.REFRESH_TOKEN_JWT_SECRET, (err, decoded) => {
+      if(err) return res.status(403).json({message: 'Invalid refresh token'})
+
+        const accessToken = jwt.sign(
+          {id: decoded.id, role: decoded.role},
+          process.env.ACCESS_TOKEN_JWT_SECRET,
+          {expiresIn: 60}
+        )
+
+        const isProduction = process.env.NODE_ENV === "production";
+
+        res.cookie("accessToken", accessToken, {
+          httpOnly: true,
+          secure: isProduction, // True in production (HTTPS), false in dev (HTTP)
+          sameSite: isProduction ? "none" : "lax", // 'none' for cross-site in prod, 'lax' for dev
+          maxAge: 60 * 1000, // 1 day
+        });
+
+        return res.sendStatus(204);
+
+    })
+  }
 };
 
 module.exports = passwordAuthController;

@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearAuthError, registerUser } from '../../features/auth/authSlice';
-import toast from 'react-hot-toast';
+import { clearAuthError, registerUser, selectAuthError, selectAuthLoading, selectUser } from '../../features/auth/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
-  const { loading, error, user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const location = useLocation();
+  const isAuthLoading = useSelector(selectAuthLoading);
+  const authError = useSelector(selectAuthError);
+  const user = useSelector(selectUser);
+
+ 
 
   const [form, setForm] = useState({
     email: '',
@@ -37,7 +40,7 @@ const RegisterForm = () => {
     if (user) {
       navigate('/login');
     }
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   useEffect(() => {
     dispatch(clearAuthError());
@@ -64,13 +67,13 @@ const RegisterForm = () => {
         required
         className="w-full border p-2"
       />
-      {error && <p className="text-red-500">{error}</p>}
+      {authError && <p className="text-red-500">{authError}</p>}
       <button
         type="submit"
         className="bg-green-600 text-white py-2 px-4 w-full"
-        disabled={loading}
+        disabled={isAuthLoading}
       >
-        {loading ? 'Registering...' : 'Register'}
+        {isAuthLoading ? 'Registering...' : 'Register'}
       </button>
 
       {/* Login if you laready have an account */}

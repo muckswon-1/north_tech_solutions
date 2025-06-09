@@ -45,6 +45,25 @@ const productController = {
       res.status(500).json({ message: error.message });
     }
   },
+  getRelatedProducts: async (req,res) => {
+    try {
+      const id = req.params.id;
+
+      if(id){
+        const relatedProducts =  await Product.related(id);
+        
+        if(relatedProducts.length === 0){
+          res.status(401).json([]);
+        }else {
+          res.json(relatedProducts);
+        }
+      }
+      
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({message: error?.message, error});
+    }
+  }
 };
 
 module.exports = productController;

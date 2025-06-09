@@ -6,6 +6,7 @@ import {
   clientRegister,
   fetchCurrentUser,
   clientLogout,
+  clientHandleRefreshToken,
 } from '../../api/user';
 import toast from 'react-hot-toast';
 
@@ -14,7 +15,7 @@ export const loginUser = createAsyncThunk(
   async (userCredentials, thunkAPI) => {
     try {
       const response = await clientLogin(userCredentials);
-
+      toast.success('Logged in successfully.')
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error?.message);
@@ -31,6 +32,7 @@ export const registerUser = createAsyncThunk(
       toast.success('Registration successful');
       return response;
     } catch (error) {
+
       return thunkAPI.rejectWithValue(error?.message || 'Registration failed');
     }
   },
@@ -73,6 +75,7 @@ export const logoutUser = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       await clientLogout(); // Call backend to clear httpOnly cookie
+      toast.error('Logged out');
       return; // No specific payload needed on success
     } catch (error) {
       return thunkAPI.rejectWithValue(
@@ -81,6 +84,20 @@ export const logoutUser = createAsyncThunk(
     }
   },
 );
+
+export const newAccessToken = createAsyncThunk(
+  'userPasswordAuth/newAccessToken',
+  async(_, thunkAPI) => {
+    try {
+       await clientHandleRefreshToken();
+       return
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data || { message: 'Issuing new access token failed.' },
+      );
+    }
+  }
+)
 
 const initialState = {
   // accessToken: /*JSON.parse(localStorage.getItem('accessToken')) || */null,
@@ -178,10 +195,33 @@ const userAuthSlice = createSlice({
         localStorage.removeItem('user');
         state.user = null;
         state.error = action.payload?.message || 'Logout failed';
-      });
+      })
+      .addCase(newAccessToken.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(newAccessToken.fulfilled,(state,action) => {
+        state.isLoading = false;
+        state.isAuthenticated = true;
+        localStorage.setItem('isAuthenticated', true);
+        state.error = null
+      })
+      .addCase(newAccessToken.rejected,(state, action) => {
+        state.isLoading = false;
+        state.isAuthenticated = false;
+        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('user');
+        state.user = null;
+        state.error = action.payload?.message;
+      })
+      
   },
 });
 
 export const { clearAuthError } = userAuthSlice.actions;
+
+export const selectIsAuthenticated = state => state.auth.isAuthenticated;
+export const selectUser = state => state.auth.user;
+export const selectAuthLoading = state => state.auth.loading;
+export const selectAuthError = state => state.auth.error;
 
 export default userAuthSlice.reducer;

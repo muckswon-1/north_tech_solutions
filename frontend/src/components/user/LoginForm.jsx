@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearAuthError, loginUser } from '../../features/auth/authSlice';
+import { clearAuthError, loginUser, newAccessToken } from '../../features/auth/authSlice';
 import { useState } from 'react';
 import { use } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -17,7 +17,7 @@ const LoginForm = () => {
     password: '',
   });
 
-  console.log(error);
+
 
   const navigate = useNavigate();
 
@@ -37,12 +37,14 @@ const LoginForm = () => {
     dispatch(loginUser(form));
   };
 
+ 
+
   // ⏩ redirect user after successful login
   useEffect(() => {
-    if(user && isAuthenticated){
+    if(isAuthenticated){
       navigate(from, {replace: true});
     }
-  }, [user]);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     dispatch(clearAuthError());

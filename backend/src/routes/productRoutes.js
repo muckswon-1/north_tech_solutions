@@ -12,5 +12,6 @@ ProductRouter.post("/", productController.createProduct);
 ProductRouter.delete("/:id", productController.deleteProduct);
 //update a product
 ProductRouter.put("/:id", productController.updateProduct);
+ProductRouter.get("/:id/related", productController.getRelatedProducts )
 
 module.exports = ProductRouter;

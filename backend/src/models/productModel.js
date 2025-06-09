@@ -38,6 +38,38 @@ const Product = {
     const result = await pool.query(query, [...productValues, id]);
     return result.rows[0];
   },
+
+  // get related products using pg_trgm fuzzy logic
+  related :  async (id) => {
+    
+    // Get the current product
+    try {
+
+      const currentProductResult = await Product.returnById(id);
+
+    if(currentProductResult.length === 0){
+      return []
+    }
+
+    const currentProduct = currentProductResult[0];
+
+    const combined = `${currentProduct.name} ${currentProduct.description} ${currentProduct.specs || ''}`;
+
+    const {rows : related} = await pool.query(`
+        SELECT *,  similarity(name ||  ' ' || description || ' ' || specs, $1 ) AS score
+        FROM product
+        WHERE id != $2
+        ORDER BY  score DESC
+        LIMIT 5
+      `,[combined, id]);
+
+     return related
+      
+    } catch (error) {
+      throw error
+    }
+   
+  }
 };
 
 module.exports = Product;

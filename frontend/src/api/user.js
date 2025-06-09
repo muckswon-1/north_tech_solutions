@@ -62,3 +62,15 @@ export const clientLogout = async () => {
     throw error;
   }
 };
+
+export const clientHandleRefreshToken = async () => {
+  try {
+     const response = await sokoniApi.post(`${authServicePath}/refresh`);
+     if(response.status === 204){
+      return true;
+     }
+
+  } catch (error) {
+     throw error;
+  }
+}

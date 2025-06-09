@@ -5,20 +5,20 @@ import toast from 'react-hot-toast';
 
 export const submitInquiry = createAsyncThunk(
   'inquiry/submitInquiry',
-  async (userInfo, { rejectWithValue, dispatch }) => {
-    try {
-      const response = await clientCreateInquiry(userInfo);
-      if (!response.inquiryId) {
-        throw new Error('Inquiry submission failed');
-      }
+ async (userInfo, thunkApi)  => {
+  try {
+     const response = await clientCreateInquiry(userInfo);
 
-      return response.inquiryId;
-    } catch (error) {
-      console.error(error);
-
-      return rejectWithValue(error.message);
-    }
-  },
+     
+     
+     if(response.status === 201){
+      return response.data.inquiryId;
+     }
+  } catch (error) {
+   
+    return thunkApi.rejectWithValue(error.message);
+  }
+ }
 );
 
 const initialState = {

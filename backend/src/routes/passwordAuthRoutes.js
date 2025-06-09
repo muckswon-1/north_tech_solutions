@@ -1,6 +1,7 @@
 const express = require("express");
 const passwordAuthController = require("../controllers/passwordAuthController");
-const verifyToken = require("./verify");
+const { verifyAccessToken } = require("./verify");
+
 
 const PasswordAuthRouter = express.Router();
 
@@ -18,8 +19,12 @@ PasswordAuthRouter.get(
 );
 PasswordAuthRouter.get(
   "/sokoni-api/password-auth/me",
-  verifyToken,
+  verifyAccessToken,
   passwordAuthController.getMe,
 );
+PasswordAuthRouter.post(
+  "/sokoni-api/password-auth/refresh",
+  passwordAuthController.getNewAccessToken
+)
 
 module.exports = PasswordAuthRouter;

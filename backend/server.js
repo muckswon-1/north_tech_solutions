@@ -13,6 +13,7 @@ const ProductRouter = require("./src/routes/productRoutes");
 const InquiryRouter = require("./src/routes/inquiryRoutes");
 const envFile = require("./src/config/envConfig");
 const PasswordAuthRouter = require("./src/routes/passwordAuthRoutes");
+const { verifyAccessToken } = require("./src/routes/verify");
 
 require("dotenv").config({ path: envFile });
 

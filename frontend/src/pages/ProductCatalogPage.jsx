@@ -1,10 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProductGrid from '../components/ProductCatalog/ProductGrid';
-import { useProducts } from '../hooks/useProducts';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProducts, selectProducts, selectProductsIsLoading } from '../features/products/productSlice';
 
 const ProductCatalogPage = () => {
-  const { products, loading } = useProducts();
+  const products = useSelector(selectProducts)
+  const  loading  = useSelector(selectProductsIsLoading);
   const [searchQuery, setSearchQuery] = useState('');
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  },[dispatch])
 
   if (loading) return <p>Loading...</p>;
   if (!products) return <p>No products found </p>;

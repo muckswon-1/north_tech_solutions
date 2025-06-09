@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import validator from 'validator';
@@ -7,15 +7,18 @@ import {
   removeFromInquiry,
   submitInquiry,
   clearInquiry,
+  selectInquiryItems,
 } from '../features/inquiry/inquirySlice';
+import { newAccessToken, selectIsAuthenticated } from '../features/auth/authSlice';
 
 //Suggested improvement - customer to opt to schedule a google meet on inquiry submission
 
 const InquiryPage = () => {
-  const { inquiryItems } = useSelector((state) => state.inquiry);
-
+  const inquiryItems = useSelector(selectInquiryItems);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const dispatch = useDispatch();
 
+ 
   const [formData, setFormData] = useState({
     companyName: '',
     businessType: '',
@@ -29,6 +32,8 @@ const InquiryPage = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+
 
   //validate form
   const validateForm = () => {
@@ -57,23 +62,16 @@ const InquiryPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-
-    try {
-      dispatch(submitInquiry(formData));
-      toast.success('Inquiry submitted successfully');
-
-      setFormData({
-        companyName: '',
-        businessType: '',
-        contactName: '',
-        contactPhone: '',
-        contactEmail: '',
-        message: '',
-      });
-    } catch (error) {
-      console.log(error);
-      toast.error('Inquiry submission failed');
-    }
+    
+    dispatch(submitInquiry(formData));
+    setFormData({
+      companyName: '',
+      businessType: '',
+      contactName: '',
+      contactPhone: '',
+      contactEmail: '',
+      message: '',
+    });
   };
 
   if (!inquiryItems.length) {
@@ -90,6 +88,9 @@ const InquiryPage = () => {
       </div>
     );
   }
+
+
+
 
   return (
     <div className="max-w-4xl mx-auto p-4">

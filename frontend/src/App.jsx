@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import store from './app/store';
-import { checkAuthStatus } from './features/auth/authSlice'; // Import the new thunk
+import { checkAuthStatus, newAccessToken, selectIsAuthenticated } from './features/auth/authSlice'; // Import the new thunk
 import Layout from './components/Layout/Layout';
 
 // Import your page components
@@ -15,22 +15,24 @@ import LoginForm from './components/user/LoginForm';
 import RegisterForm from './components/user/RegisterForm';
 import RequireAuth from './components/user/RequireAuth';
 import { Toaster } from 'react-hot-toast';
+import { useLocation } from 'react-router-dom';
+
 
 function App() {
   // Create a component to wrap routes and dispatch the auth check
   const AppContent = () => {
-    const dispatch = useDispatch();
-    const { isAuthenticated, user } = useSelector((state) => state.auth);
-    useEffect(() => {
-      // Dispatch the thunk when the component mounts
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const dispatch = useDispatch();
 
-      if (user && isAuthenticated) {
-        dispatch(checkAuthStatus());
-      }
+  // useEffect(() => {
+   
+  //     dispatch(checkAuthStatus());
+    
+  // }, [dispatch, isAuthenticated]);
 
-      //dispatch(checkAuthStatus());
-    }, [dispatch]); // Dependency array ensures it runs only once on mount
+  
 
+  
     return (
       <Router>
         <Layout>
@@ -51,9 +53,9 @@ function App() {
             <Route
               path="/inquiry"
               element={
-                <RequireAuth>
+              
                   <InquiryPage />
-                </RequireAuth>
+               
               }
             />
           </Routes>
@@ -64,7 +66,9 @@ function App() {
 
   return (
     <Provider store={store}>
+     
       <AppContent /> {/* Render the new wrapper component */}
+     
       <Toaster position="top-right" reverseOrder={false} />
     </Provider>
   );

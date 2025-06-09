@@ -22,9 +22,9 @@ export const clientCreateInquiry = async (userInfo) => {
     };
     //TODO : check here when you come back
     const response = await sokoniApi.post(inquiriesEndpoint, inquiryData);
-    return response.data;
+    return  response;
   } catch (error) {
     console.error('Error creating inquiry:', error);
-    return null;
+    throw error;
   }
 };

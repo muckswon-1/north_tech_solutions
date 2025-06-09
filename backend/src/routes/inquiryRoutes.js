@@ -1,18 +1,20 @@
 const express = require("express");
 const InquiryController = require("../controllers/inquiryController");
-const verifyToken = require("./verify");
+const { verifyAccessToken } = require("./verify");
+
+
 
 const InquiryRouter = express.Router();
 
 //get all inquiries
-InquiryRouter.get("/", verifyToken, InquiryController.getAllInquiries);
+InquiryRouter.get("/",verifyAccessToken, InquiryController.getAllInquiries);
 //get inquiry by id
-InquiryRouter.get("/", verifyToken, InquiryController.getInquiryById);
-//create inquiry
-InquiryRouter.post("/", verifyToken, InquiryController.createInquiry);
+InquiryRouter.get("/", verifyAccessToken, InquiryController.getInquiryById);
+//create inquiry 
+InquiryRouter.post("/",  verifyAccessToken, InquiryController.createInquiry);
 //update inquiry
-InquiryRouter.put("/", verifyToken, InquiryController.updateInquiry);
+InquiryRouter.put("/",  verifyAccessToken, InquiryController.updateInquiry);
 //delete inquiry
-InquiryRouter.delete("/", verifyToken, InquiryController.deleteInquiry);
+InquiryRouter.delete("/",  verifyAccessToken, InquiryController.deleteInquiry);
 
 module.exports = InquiryRouter;
