@@ -53,11 +53,10 @@ function App() {
             <Route
               path="/inquiry"
               element={
-              
+                <RequireAuth>
                   <InquiryPage />
-               
-              }
-            />
+                </RequireAuth>
+              } />
           </Routes>
         </Layout>
       </Router>

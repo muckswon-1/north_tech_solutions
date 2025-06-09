@@ -42,26 +42,32 @@ const passwordAuthController = {
         // Successful login
         // set a cookie
 
+         const refreshTokenExpiryTime = 30 * 24 * 60 * 60 * 1000;
+         const accessTokenExpiryTime = 7 * 24 * 60 * 60 * 1000;
+
         const isProduction = process.env.NODE_ENV === "production";
         const accessToken = jwt.sign(  { id: user.id, role: user.role },process.env.ACCESS_TOKEN_JWT_SECRET,
-          {expiresIn: 60}
+          {expiresIn: accessTokenExpiryTime} 
         );
 
-        const refreshToken = jwt.sign({id: user.id, role: user.role}, process.env.REFRESH_TOKEN_JWT_SECRET, {expiresIn: '7d'})
+
+        
+        const refreshToken = jwt.sign({id: user.id, role: user.role}, process.env.REFRESH_TOKEN_JWT_SECRET, {expiresIn: refreshTokenExpiryTime}) // 1 month
 
         res.cookie('refreshToken', refreshToken, {
           httpOnly: true,
           secure: isProduction,
           sameSite: isProduction ? 'none' :  'lax',
-          maxAge: 7 * 24 * 60 * 60 * 1000
+          maxAge: refreshTokenExpiryTime
         })
 
         res.cookie("accessToken", accessToken, {
           httpOnly: true,
           secure: isProduction, // True in production (HTTPS), false in dev (HTTP)
           sameSite: isProduction ? "none" : "lax", // 'none' for cross-site in prod, 'lax' for dev
-          maxAge: 60 * 1000, // 1 day
+          maxAge: accessTokenExpiryTime, // 1 day
         });
+
         res
           .status(200)
           .json({
@@ -79,14 +85,33 @@ const passwordAuthController = {
     }
   },
   logout: (req, res) => {
-  
-    if (!req.cookies.accessToken) {
-      return res.status(400).json({ message: "No access token to log out." });
+
+    const isProduction = process.env.NODE_ENV === "production";
+    const cookieOptions = {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+      maxAge: 0,
     }
+  
+    if (!req.cookies.accessToken && !req.cookies.refreshToken) {
+      res.clearCookie('accessToken', cookieOptions);
+      res.clearCookie('refreshToken',cookieOptions);
+
+      return res.status(200).json({message: 'Logged out or tokens expired'})
+    }
+
+    if (!req.cookies.accessToken && req.cookies.refreshToken) {
+
+      res.clearCookie('accessToken', cookieOptions);
+
+      return res.status(200).json({message: 'Logged out or tokens expired'})
+    }
+    
 
     // Implement logout logic, e.g., invalidating a session or token
     // For a stateless API (JWT), logout is often handled client-side by deleting the token.
-    const isProduction = process.env.NODE_ENV === "production";
+   
     res.clearCookie("accessToken", {
       httpOnly: true,
       secure: isProduction,
@@ -110,7 +135,9 @@ const passwordAuthController = {
   },
   getNewAccessToken: async (req,res)  => {
     const token = req.cookies.refreshToken;
-    if(!token) return res.status(401).json({message: "Missing Refresh Token"});
+    if(!token){
+      return  res.status(401).json({message: 'Missing refresh token'});
+      };
 
     jwt.verify(token, process.env.REFRESH_TOKEN_JWT_SECRET, (err, decoded) => {
       if(err) return res.status(403).json({message: 'Invalid refresh token'})

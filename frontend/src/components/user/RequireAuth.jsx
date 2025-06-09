@@ -8,9 +8,11 @@ const RequireAuth = ({ children }) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+
+
   
-  
-  if (!user) {
+  if (!user || !isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
   return children;

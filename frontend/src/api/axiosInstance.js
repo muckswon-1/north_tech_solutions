@@ -27,7 +27,7 @@ sokoniApi.interceptors.response.use(
 
      const originalRequest = error.config;
 
-    if(error.response?.status === 401 && !originalRequest._retry ){
+    if(error.response?.status === 401 && !originalRequest._retry && !originalRequest.url.includes('/refresh')){
 
        originalRequest._retry = true;
 
@@ -35,12 +35,12 @@ sokoniApi.interceptors.response.use(
       await store.dispatch(newAccessToken()).unwrap();
       
       return sokoniApi(originalRequest);
-    } catch (error) {
-      console.log('An error occured and was caught')
-      console.log(error);
-
-     store.dispatch(logoutUser());
-    
+    } catch (refreshError) {
+     console.log(refreshError);
+     
+    await store.dispatch(logoutUser()).unwrap();
+     window.location.href = "/login"
+    return Promise.reject(refreshError);
     }
    }
    

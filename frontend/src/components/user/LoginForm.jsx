@@ -17,10 +17,7 @@ const LoginForm = () => {
     password: '',
   });
 
-
-
   const navigate = useNavigate();
-
   const from = useLocation().state?.from?.pathname || '/';
   const location = useLocation();
 
@@ -37,11 +34,10 @@ const LoginForm = () => {
     dispatch(loginUser(form));
   };
 
- 
 
   // ⏩ redirect user after successful login
   useEffect(() => {
-    if(isAuthenticated){
+    if(isAuthenticated && user){
       navigate(from, {replace: true});
     }
   }, [isAuthenticated]);
