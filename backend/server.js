@@ -23,7 +23,7 @@ const port = process.env.SERVER_PORT || 3000;
 //  MIDDLEWARE - CORS Configuration
 const whitelist = [
   process.env.FRONTEND_URL, // Your primary frontend URL from .env
-  "http://192.168.0.101:5173", // A specific known development IP
+  process.env.FRONTEND_LOCAL_HOST
 ];
 
 // In development, allow common local network IP patterns for the frontend port
