@@ -5,6 +5,11 @@ const cookieParser = require("cookie-parser");
 
 //Morgan for HTTP logging
 const morgan = require("morgan");
+const http = require('http');
+const errorHandler = require('express-error-handler');
+
+const server = http.createServer(app);
+
 
 // import modules
 const { authUrl, oauth2Client } = require("./google_auth");
@@ -75,6 +80,14 @@ app.use("/sokoni-api/inquiry", InquiryRouter);
 
 // USER AUTH ROUTES
 app.use("/", PasswordAuthRouter);
+
+
+//Log error
+
+app.use((err,req,res,next) => {
+  console.log(err);
+  next(err);
+})
 
 // INITIATE AUTH FLOW
 app.get("/auth/google", (req, res) => {
@@ -147,6 +160,9 @@ app.post("/schedule-meeting", async (req, res) => {
     res.status(500).json({ error: "Failed to schedule meeting" });
   }
 });
+
+
+app.use(errorHandler({server: server}));
 
 // START SERVER
 app.listen(port, "0.0.0.0", () => {
