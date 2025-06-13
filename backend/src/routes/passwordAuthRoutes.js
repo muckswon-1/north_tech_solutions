@@ -6,24 +6,24 @@ const { verifyAccessToken } = require("./verify");
 const PasswordAuthRouter = express.Router();
 
 PasswordAuthRouter.post(
-  "/sokoni-api/password-auth/register",
+  "/password-auth/register",
   passwordAuthController.register,
 );
 PasswordAuthRouter.post(
-  "/sokoni-api/password-auth/login",
+  "/password-auth/login",
   passwordAuthController.login,
 );
 PasswordAuthRouter.get(
-  "/sokoni-api/password-auth/logout",
+  "/password-auth/logout",
   passwordAuthController.logout,
 );
 PasswordAuthRouter.get(
-  "/sokoni-api/password-auth/me",
+  "/password-auth/me",
   verifyAccessToken,
   passwordAuthController.getMe,
 );
 PasswordAuthRouter.post(
-  "/sokoni-api/password-auth/refresh",
+  "/password-auth/refresh",
   passwordAuthController.getNewAccessToken
 )
 

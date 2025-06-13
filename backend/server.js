@@ -73,10 +73,10 @@ app.get("/", (req, res) => {
 });
 
 // PRODUCT ROUTES
-app.use("/sokoni-api/products", ProductRouter);
+app.use("/products", ProductRouter);
 
 //INQUIRY ROUTES
-app.use("/sokoni-api/inquiry", InquiryRouter);
+app.use("/inquiry", InquiryRouter);
 
 // USER AUTH ROUTES
 app.use("/", PasswordAuthRouter);
@@ -166,7 +166,8 @@ app.use(errorHandler({server: server}));
 
 // START SERVER
 app.listen(port, "0.0.0.0", () => {
-  console.log(
-    `Example app listening on ${process.env.BACKEND_URL} port ${port}`,
-  );
+  process.env === "development" ?  console.log(
+    `Example app listening on ${process.env.BACKEND_URL}`,
+  )
+  : '';
 });

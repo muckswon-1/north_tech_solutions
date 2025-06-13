@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { checkAuthStatus, logoutUser, newAccessToken } from '../features/auth/authSlice';
 import store from '../app/store';
-const SERVER_URL = `${import.meta.env.VITE_BACKEND_URL}/sokoni-api`;
+const SERVER_URL = `${import.meta.env.VITE_BACKEND_URL}`;
 
 
 const sokoniApi = axios.create({
