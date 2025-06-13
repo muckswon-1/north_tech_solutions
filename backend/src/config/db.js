@@ -11,18 +11,7 @@ const poolConfig = {
   database: process.env.DATABASE_NAME,
 };
 
-let pool = null;
-
-if (process.env.NODE_ENV === "staging") {
-  pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false,
-    },
-  });
-} else {
-  pool = new Pool(poolConfig);
-}
+const pool = new Pool(poolConfig);
 
 pool.on("connect", () => {
   console.log("✅ Connected to PostresSQL");
