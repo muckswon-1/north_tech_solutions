@@ -27,6 +27,8 @@ const passwordAuthController = {
       console.log(error);
       res.status(500).json({ message: error.message });
     }
+
+
   },
   login: async (req, res) => {
     try {
@@ -49,7 +51,6 @@ const passwordAuthController = {
         const accessToken = jwt.sign(  { id: user.id, role: user.role },process.env.ACCESS_TOKEN_JWT_SECRET,
           {expiresIn: accessTokenExpiryTime} 
         );
-
 
         
         const refreshToken = jwt.sign({id: user.id, role: user.role}, process.env.REFRESH_TOKEN_JWT_SECRET, {expiresIn: refreshTokenExpiryTime}) // 1 month
@@ -134,6 +135,7 @@ const passwordAuthController = {
     }
   },
   getNewAccessToken: async (req,res)  => {
+    console.log('Refresh token in getNewAccessToken')
     const token = req.cookies.refreshToken;
     if(!token){
       return  res.status(401).json({message: 'Missing refresh token'});

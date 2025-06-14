@@ -28,7 +28,6 @@ const port = process.env.SERVER_PORT || 3000;
 //  MIDDLEWARE - CORS Configuration
 const whitelist = [
   process.env.FRONTEND_URL, // Your primary frontend URL from .env
-  process.env.FRONTEND_LOCAL_HOST
 ];
 
 // In development, allow common local network IP patterns for the frontend port
@@ -73,13 +72,13 @@ app.get("/", (req, res) => {
 });
 
 // PRODUCT ROUTES
-app.use("/products", ProductRouter);
+app.use("/api/products", ProductRouter);
 
 //INQUIRY ROUTES
-app.use("/inquiry", InquiryRouter);
+app.use("/api/inquiry", InquiryRouter);
 
 // USER AUTH ROUTES
-app.use("/", PasswordAuthRouter);
+app.use("/api/password-auth/", PasswordAuthRouter);
 
 
 //Log error
