@@ -135,7 +135,6 @@ const passwordAuthController = {
     }
   },
   getNewAccessToken: async (req,res)  => {
-    console.log('Refresh token in getNewAccessToken')
     const token = req.cookies.refreshToken;
     if(!token){
       return  res.status(401).json({message: 'Missing refresh token'});

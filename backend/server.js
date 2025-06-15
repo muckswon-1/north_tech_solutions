@@ -19,6 +19,7 @@ const InquiryRouter = require("./src/routes/inquiryRoutes");
 const envFile = require("./src/config/envConfig");
 const PasswordAuthRouter = require("./src/routes/passwordAuthRoutes");
 const { verifyAccessToken } = require("./src/routes/verify");
+const path = require("path");
 
 require("dotenv").config({ path: envFile });
 
@@ -60,11 +61,19 @@ const corsOptions = {
   },
   credentials: true,
 };
+
+const staticFilesDir = '/var/www/staging.muckswon.com'
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan("dev"));
+app.use(express.static(staticFilesDir));
+
+//Fallback: serve index.html for ll other routes
+app.get('*', (req,res) => {
+  res.sendFile(path.join(staticFilesDir, 'index.html'))
+})
 
 // TEST ROUTE
 app.get("/", (req, res) => {
@@ -165,8 +174,10 @@ app.use(errorHandler({server: server}));
 
 // START SERVER
 app.listen(port, "0.0.0.0", () => {
+
+  
   process.env === "development" ?  console.log(
-    `Example app listening on ${process.env.BACKEND_URL}`,
+    `Sokoni app listening on ${process.env.BACKEND_URL}`,
   )
   : '';
 });

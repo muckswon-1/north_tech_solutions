@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
 const { DateTime } = require("luxon");
+const winston = require('winston');
 
 //get start time and end time
 const getStartTimeAndEndTime = (
@@ -83,6 +84,20 @@ const sendMail = async () => {
     },
   });
 };
+
+
+const infoLogger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  defaultMeta: {service: 'user-service'},
+  transports: [
+    new winston.transports.File({filename: 'error.log', level: 'error'}),
+    new winston.transports.File({filename: 'combined.log'})
+  ]
+})
+
+
+
 
 module.exports = {
   getCalendarId,
