@@ -62,7 +62,7 @@ const corsOptions = {
   credentials: true,
 };
 
-const staticFilesDir = '/var/www/staging.muckswon.com'
+const staticFilesDir = '/var/www/sokoni.muckswon.com'
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
