@@ -70,15 +70,17 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(express.static(staticFilesDir));
 
-//Fallback: serve index.html for ll other routes
-app.get('*', (req,res) => {
-  res.sendFile(path.join(staticFilesDir, 'index.html'))
-})
+
 
 // TEST ROUTE
-app.get("/", (req, res) => {
+app.get("/health", (req, res) => {
   res.send("Back end server is running!");
 });
+
+//Fallback: serve index.html for ll other routes
+app.all('/api', (req,res) => {
+  res.sendFile(path.join(staticFilesDir, 'index.html'))
+})
 
 // PRODUCT ROUTES
 app.use("/api/products", ProductRouter);
