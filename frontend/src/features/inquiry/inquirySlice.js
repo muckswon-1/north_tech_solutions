@@ -1,28 +1,11 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { clientCreateInquiry } from '../../api/inquiry';
 import toast from 'react-hot-toast';
+import { submitInquiry } from './inquiriesThunk';
 
-export const submitInquiry = createAsyncThunk(
-  'inquiry/submitInquiry',
- async (userInfo, thunkApi)  => {
-  try {
-     const response = await clientCreateInquiry(userInfo);
-
-     
-     
-     if(response.status === 201){
-      return response.data.inquiryId;
-     }
-  } catch (error) {
-   
-    return thunkApi.rejectWithValue(error.message);
-  }
- }
-);
 
 const initialState = {
-  inquiryItems: JSON.parse(localStorage.getItem('inquiryItems')) || [],
+  inquiryItems: [],
   isLoading: false,
   error: null,
 };
@@ -42,17 +25,17 @@ const inquirySlice = createSlice({
         toast.success('Product quantity updated in inquiry');
       } else {
         state.inquiryItems.push(product);
-        toast.success('Product added to inquiry');
+     
       }
-      localStorage.setItem('inquiryItems', JSON.stringify(state.inquiryItems));
+      
     },
     removeFromInquiry: (state, action) => {
       const productId = action.payload;
       state.inquiryItems = state.inquiryItems.filter(
         (item) => item.id !== productId,
       );
-      localStorage.setItem('inquiryItems', JSON.stringify(state.inquiryItems));
-      toast.error('Product removed from inquiry');
+      
+    
     },
     clearInquiry: (state) => {
       state.inquiryItems = [];

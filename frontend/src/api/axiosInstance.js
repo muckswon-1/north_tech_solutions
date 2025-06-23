@@ -20,37 +20,49 @@ const sokoniApi = axios.create({
 
 sokoniApi.interceptors.response.use(
   response => {
-    
     return response
   },
   async (error) => {
+  
+    const originalRequest = error.config;
+    
+    console.log(originalRequest.url.includes('/refresh'));
 
-     const originalRequest = error.config;
-
-    if(error.response?.status === 401 && !originalRequest._retry && !originalRequest.url.includes('/refresh')){
+     if(error?.status === 401 && !originalRequest._retry && !originalRequest.url.includes('/refresh') &&
+       !originalRequest.url.includes('/login') &&
+       !originalRequest.url.includes('/admin-login')
+    ){
 
        originalRequest._retry = true;
 
     try {
+      
       await store.dispatch(newAccessToken()).unwrap();
       
-      return sokoniApi(originalRequest);
+
+       return sokoniApi(originalRequest);
     } catch (refreshError) {
-     console.log(refreshError);
+       console.log(refreshError);
      
-    await store.dispatch(logoutUser()).unwrap();
+     await store.dispatch(logoutUser()).unwrap();
      window.location.href = "/login"
-    return Promise.reject(refreshError);
+     return Promise.reject(refreshError);
     }
    }
    
-   const defaultMessage = 'Something went wrong. Please try again later.';
+   console.log(error?.response?.data)
 
-    const customError = new Error(
-      error?.response?.data?.message || error?.message || defaultMessage,
-    );
+   const defaultError = 'Something went wrong. Please refresh and try again.'
 
-    customError.status = error?.response?.status || 500;
+   const customError = new Error (
+    error?.response?.data?.message || defaultError
+   )
+
+
+
+   customError.status = error?.status || 500;
+
+   console.log(customError);
 
     return Promise.reject(customError);
 }

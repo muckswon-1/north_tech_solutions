@@ -1,8 +1,9 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { use, useEffect, useRef, useState } from 'react';
+import {  useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutUser, selectIsAuthenticated } from '../../features/auth/authSlice'; // Import the async thunk
+import { logoutUser, selectIsAuthenticated, selectUser } from '../../features/auth/authSlice'; // Import the async thunk
 import sokoniLogo from '../../assets/logo.png';
+
 
 const NavBar = () => {
   //use redux toolkit to access inquiry items
@@ -12,16 +13,13 @@ const NavBar = () => {
   const navbarRef = useRef(null);
   const [navbarBottom, setNavbarBottom] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectIsAuthenticated);
-
+const sessionUser = useSelector(selectUser);
   const [showLogoutButton, setShowLogoutButton] = useState(false);
 
   
-  
-
   const handleLogoutButtonClick = async () => {
     
 
@@ -38,8 +36,15 @@ const NavBar = () => {
   };
 
   useEffect(() => {
-    setShowLogoutButton(isAuthenticated);
-  }, [isAuthenticated]);
+    
+     if(sessionUser && isAuthenticated) {
+      setShowLogoutButton(isAuthenticated);
+     }else{
+      navigate('/login');
+      setShowLogoutButton(false);
+     }
+   
+  }, [isAuthenticated, sessionUser]);
 
 
   useEffect(() => {
@@ -84,8 +89,8 @@ const NavBar = () => {
           <Link to="/products" className="hover:underline">
             Products
           </Link>
-          <Link to="/inquiry" className="hover:underline">
-            Inquiry
+          <Link to={`${sessionUser?.id}/my-inquiries`} className="hover:underline">
+            My Inquiries
             {inquiryItems.length > 0 && (
               <span className="ml-1 bg-red-600 text-white rounded-full px-2 py-0.5 text-xs">
                 {inquiryItems.length}
@@ -104,6 +109,12 @@ const NavBar = () => {
               Login
             </Link>
           )}
+           <Link
+                to={`${sessionUser?.id}/profile`}
+                className="hover-underline"
+              >
+                Profile
+              </Link>
         </div>
         {/* Mobile menu button */}
         <button
@@ -154,11 +165,11 @@ const NavBar = () => {
             </li>
             <li className="relative">
               <Link
-                to={'/inquiry'}
+                to={`${sessionUser?.id}/my-inquiries`}
                 className="font-bold"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Inquiry
+                My Inquiries
               </Link>
               {inquiryItems.length > 0 && (
                 <span className="absolute top-0 right-0 bg-red-600 text-white rounded-full px-2 py-0.5 text-xs">
@@ -180,6 +191,15 @@ const NavBar = () => {
                   Login
                 </Link>
               )}
+            </li>
+            <li>
+            <Link
+                to={`${sessionUser?.id}/profile`}
+                className="font-bold"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Profile
+              </Link>
             </li>
           </ul>
         </div>

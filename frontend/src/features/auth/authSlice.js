@@ -7,7 +7,7 @@ import {
   fetchCurrentUser,
   clientLogout,
   clientHandleRefreshToken,
-} from '../../api/user';
+} from '../../api/passwordAuth';
 import toast from 'react-hot-toast';
 
 export const loginUser = createAsyncThunk(
@@ -23,13 +23,15 @@ export const loginUser = createAsyncThunk(
   },
 );
 
+
+
 // Async thunk for registration
 export const registerUser = createAsyncThunk(
   'userPasswordAuth/registerUser',
   async (user, thunkAPI) => {
     try {
       const response = await clientRegister(user);
-      toast.success('Registration successful');
+    
       return response;
     } catch (error) {
 
@@ -143,6 +145,7 @@ const userAuthSlice = createSlice({
         state.user = null;
         localStorage.removeItem('user');
       })
+
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -151,7 +154,7 @@ const userAuthSlice = createSlice({
         state.isLoading = false;
         state.error = action.null;
         state.user = action.payload;
-        localStorage.setItem('user', JSON.stringify(action.payload));
+        //localStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;

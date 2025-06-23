@@ -1,76 +1,66 @@
-import sokoniApi from './axiosInstance'; // Import the configured Axios instance
+import sokoniApi from "./axiosInstance";
+const usersBasePath = '/users'
 
-// Define path relative to sokoniApi's baseURL
-const authServicePath = '/password-auth';
 
-export const clientRegister = async (user) => {
-  try {
-    const response = await sokoniApi.post(`${authServicePath}/register`, {
-      ...user,
-    });
 
-    if (response.status === 201) {
-      return response.data;
-    } else {
-      throw new Error('User with this email already exists.');
+export const clientGetUserById = async (id) => {
+    try {
+
+        const response = await sokoniApi.get(`${usersBasePath}/${id}`);
+
+        if(response.status === 200) {
+            return response.data;
+        }
+
+        
+    } catch (error) {
+        throw error
     }
-  } catch (error) {
-    throw error;
-  }
-};
+}
 
-export const clientLogin = async (credentials) => {
-  try {
-    const response = await sokoniApi.post(
-      `${authServicePath}/login`,
-      credentials,
-    );
-    if (response.status === 401) {
-      throw new Error('Invalid email or password');
+export const clientUpdateUser = async (newUserInfo) => {
+    try {
+      
+       const response = await  sokoniApi.patch(`${usersBasePath}/${newUserInfo.id}`,newUserInfo);
+       
+        if(response.status === 200) {
+          return response.data;
+        }
+
+    }catch(error){
+        throw  error
     }
 
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+}
 
-export const fetchCurrentUser = async () => {
-  try {
-    const response = await sokoniApi.get(`${authServicePath}/me`);
-    // Axios resolves only for 2xx status codes, so response.data should be available.
-    // Assuming a successful response from /me includes a 'user' object.
-    return response.data; // This should ideally contain { user: ... }
-  } catch (error) {
-    if (error.response && error.response.status === 401) {
-      // User is not authenticated. This is an expected scenario for this function.
-      // Return a specific structure indicating no authenticated user.
-      return { user: null };
+export const clientCreateUser = async (user) => {
+    try {
+        const response = await sokoniApi.post(usersBasePath,{...user});
+        
+        if(response.status === 200) {
+            return response
+        }
+        
+    } catch (error) {
+        throw error
     }
-    // For any other errors (network issues, server 500, etc.), re-throw them
-    // so they can be handled by the calling thunk as actual application errors.
-    throw error;
-  }
-};
+}
 
-export const clientLogout = async () => {
-  try {
-    const response = await sokoniApi.get(`${authServicePath}/logout`);
-    return response.data;
-  } catch (error) {
-    console.error('Logout API error:', error);
-    throw error;
-  }
-};
 
-export const clientHandleRefreshToken = async () => {
-  try {
-     const response = await sokoniApi.post(`${authServicePath}/refresh`);
-     if(response.status === 204){
-      return true;
-     }
 
-  } catch (error) {
-     throw error;
-  }
+export const clientDeleteUser = async (id) => {
+    try {
+        const response = await sokoniApi.delete(`${usersBasePath}/${id}`);
+
+        if(response.status === 404){
+            return false
+        }
+
+        if(response.status === 200){
+            return true
+        }
+
+    } catch (error) {
+        throw error
+    }
 }

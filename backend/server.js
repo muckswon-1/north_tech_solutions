@@ -14,12 +14,15 @@ const server = http.createServer(app);
 // import modules
 const { authUrl, oauth2Client } = require("./google_auth");
 const googleCalender = require("./calendar");
-const ProductRouter = require("./src/routes/productRoutes");
-const InquiryRouter = require("./src/routes/inquiryRoutes");
-const envFile = require("./src/config/envConfig");
-const PasswordAuthRouter = require("./src/routes/passwordAuthRoutes");
-const { verifyAccessToken } = require("./src/routes/verify");
+const ProductRouter = require("./routes/productRoutes");
+const InquiryRouter = require("./routes/inquiryRoutes");
+const envFile = require("./envConfig");
+const PasswordAuthRouter = require("./routes/passwordAuthRoutes");
+const { verifyAccessToken } = require("./routes/verify");
 const path = require("path");
+const db = require("./models");
+const UserRouter = require("./routes/userRoutes");
+const uploadRouter = require("./routes/uploads");
 
 require("dotenv").config({ path: envFile });
 
@@ -69,7 +72,21 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(express.static(staticFilesDir));
+app.use('/uploads',express.static('uploads'))
 
+
+
+async function initalizeDB(){
+  try {
+    await db.sequelize.authenticate();
+    console.log('Databse connection has been established successfully')
+    
+  } catch (error) {
+    throw error
+  }
+}
+
+initalizeDB();
 
 
 // TEST ROUTE
@@ -89,8 +106,16 @@ app.use("/api/products", ProductRouter);
 app.use("/api/inquiry", InquiryRouter);
 
 // USER AUTH ROUTES
-app.use("/api/password-auth/", PasswordAuthRouter);
+app.use("/api/password-auth", PasswordAuthRouter);
 
+//USER ROUTES
+app.use("/api/users", UserRouter);
+
+app.use("/api/upload",uploadRouter);
+
+
+//COMPANY ROUTES
+//app.use("/api/company")
 
 //Log error
 
@@ -176,9 +201,9 @@ app.use(errorHandler({server: server}));
 
 // START SERVER
 app.listen(port, "0.0.0.0", () => {
-
+  console.log("NODE_ENV: ",process.env.NODE_ENV)
   
-  process.env === "development" ?  console.log(
+  process.env.NODE_ENV === "development" ?  console.log(
     `Sokoni app listening on ${process.env.BACKEND_URL}`,
   )
   : '';
