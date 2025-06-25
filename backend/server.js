@@ -18,11 +18,13 @@ const ProductRouter = require("./routes/productRoutes");
 const InquiryRouter = require("./routes/inquiryRoutes");
 const envFile = require("./envConfig");
 const PasswordAuthRouter = require("./routes/passwordAuthRoutes");
-const { verifyAccessToken } = require("./routes/verify");
 const path = require("path");
 const db = require("./models");
 const UserRouter = require("./routes/userRoutes");
 const uploadRouter = require("./routes/uploads");
+const CompanyRouter = require("./routes/companyRoute");
+
+const UserDraftInquiryRouter = require("./routes/userDraftInquiryRoute");
 
 require("dotenv").config({ path: envFile });
 
@@ -115,7 +117,10 @@ app.use("/api/upload",uploadRouter);
 
 
 //COMPANY ROUTES
-//app.use("/api/company")
+app.use("/api/company",CompanyRouter);
+
+//INQUIRY DRAFT
+app.use("/api/inquiry-drafts",UserDraftInquiryRouter);
 
 //Log error
 

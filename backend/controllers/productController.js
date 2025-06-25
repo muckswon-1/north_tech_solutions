@@ -1,10 +1,23 @@
-const { or } = require("sequelize");
-const {Product, User} = require("../models");
+
+const {Product, User, Company} = require("../models");
 
 const productController = {
   getAllProducts: async (req, res) => {
     try {
-      const products = await Product.findAll();
+      const products = await Product.findAll({
+        include: [
+          {
+            model: User,
+            attributes: ['id'],
+            include: [
+              {
+                model: Company,
+                attributes: ['name']
+              }
+            ]
+          }
+        ]
+      });
 
       res.json(products);
     } catch (error) {
@@ -63,6 +76,7 @@ const productController = {
       res.json(updatedProduct);
       
     } catch (error) {
+  
       res.status(500).json({ message: error.message });
     }
   },

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { Provider, useDispatch, useSelector } from 'react-redux';
+import { Provider, useDispatch, useSelector, } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import store from './app/store';
-import { checkAuthStatus, newAccessToken, selectIsAuthenticated, selectUser } from './features/auth/authSlice'; // Import the new thunk
+
 import Layout from './components/Layout/Layout';
 
 // Import your page components
@@ -10,18 +10,34 @@ import FeaturesSection from './components/Layout/FeaturesSection';
 import ScheduleMeetingSection from './components/google-meeting/ScheduleMeetingSection';
 import ProductDetailsPage from './components/products/ProductDetailsPage';
 import ProductCatalogPage from './components/products/ProductCatalogPage';
-import InquiryPage from './components/inquiries/InquiryPage';
+
 import LoginForm from './components/auth/LoginForm';
 import RegisterForm from './components/auth/RegisterForm';
 import RequireAuth from './components/auth/RequireAuth';
 import { Toaster } from 'react-hot-toast';
 import UserDashboard from './components/profile/UserDashboard';
+import InquiryDraftsPage from './components/inquiryDrafts/InquiryDraftsPage';
+import { selectUserInquiryDrafts, setUserInquiryDrafts } from './features/userInquiryDrafts/userInquiryDraftSlice';
+import { selectUser } from './features/auth/authSlice';
+import { fetchUserInquiryDrafts } from './features/userInquiryDrafts/userInquiryDraftThunks';
 
 
 
 function App() {
   // Create a component to wrap routes and dispatch the auth check
+  
+
   const AppContent = () => {
+
+    const userInquiryDrafts = useSelector(selectUserInquiryDrafts);
+  const authUser = useSelector(selectUser);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchUserInquiryDrafts(authUser?.id))
+    dispatch(setUserInquiryDrafts(userInquiryDrafts));
+  },[dispatch]);
+  
 
     return (
       <Router>
@@ -44,7 +60,7 @@ function App() {
               path="/:id/my-inquiries"
               element={
                 <RequireAuth>
-                  <InquiryPage />
+                  <InquiryDraftsPage />
                 </RequireAuth>
               } />
           

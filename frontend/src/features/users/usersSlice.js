@@ -3,8 +3,6 @@ import { fetchUserById, updateUser } from "./usersThunks";
 
 
 
-
-
 const initialState = {
     currentUser: null,
     isCompleteUserInfo: false,
@@ -91,6 +89,7 @@ const usersSlice = createSlice({
   export const selectIsCompleteUserInfo = state => state.users.isCompleteUserInfo;
   export const selectCurrentUser = state => state.users.currentUser;
   export const selectUserError = state => state.users.error;
+
  
 
   

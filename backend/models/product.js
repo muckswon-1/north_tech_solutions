@@ -55,6 +55,7 @@ module.exports = (sequelize, DataTypes) => {
   Product.associate = models => {
     Product.hasMany(models.ProductInquiry, { foreignKey: 'productId' });
     Product.belongsTo(models.User, {foreignKey: 'userId'});
+    Product.hasMany(models.UserInquiryDraft, {foreignKey: 'productId'});
 
   };
   

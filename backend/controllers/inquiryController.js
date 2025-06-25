@@ -1,5 +1,5 @@
 
-const Inquiry = require("../models");
+const {Inquiry, Company, sequelize, ProductInquiry, UserInquiryDraft} = require("../models");
 
 
 const InquiryController = {
@@ -23,10 +23,55 @@ const InquiryController = {
   },
   createInquiry: async (req, res) => {
     try {
-      const { userInfo, productsInfo } = req.body;
+    
 
-      const inquiry = await Inquiry.create(userInfo); //To handle productsInfo realations
-      res.status(201).json(inquiry);
+    /**
+     * GET THE COMPANY 
+     */
+    const {userId} = req.params;
+    const inquiryInfo = req.body;
+    const transaction = await sequelize.transaction();
+
+    console.log(inquiryInfo);
+    
+    
+    const company = await Company.findOne({where: {userId}});
+    if(!company) {
+      res.status(400).json({message: 'Company not found'});
+    }
+
+
+     const newInquiry = await Inquiry.create(
+      {
+      message: inquiryInfo.message,
+      companyId: company.id
+     },
+     {transaction}
+    ); 
+
+    const  inquiryDrafts = inquiryInfo?.inquiryDrafts
+
+    const productInquiries = inquiryDrafts.map((draft) => {
+      return {
+        productId: draft.productId,
+        quantity: draft.quantity,
+        inquiryId: newInquiry.id
+      }
+    
+    });
+
+    await ProductInquiry.bulkCreate(productInquiries, {transaction});
+
+    await transaction.commit();
+
+    await UserInquiryDraft.destroy({where: {userId}});
+
+      res.status(201).json({
+        inquiry: newInquiry,
+        productInquiries,
+        message: 'Inquiry created successfully'
+      });
+      
     } catch (err) {
       console.log(err);
       res.status(500).json({ message: err.message });

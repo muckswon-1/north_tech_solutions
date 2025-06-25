@@ -1,14 +1,17 @@
 const envFile = require('../envConfig');
 require("dotenv").config({ path: envFile });
 
+console.log();
+
+
 module.exports = {
   development: {
-    username: 'sokoni_admin',
-    password: 'J0YBXsr6EyzXcxG',
-    database: 'sokoni',
-    host: 'localhost',
-    port: '5432',
-    logging : true,
+    username: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME,
+    host: process.env.DATABASE_HOST,
+    port: process.env.DATABASE_PORT,
+    logging : false,
     define: {
       underscored: false,
       timestamps: true

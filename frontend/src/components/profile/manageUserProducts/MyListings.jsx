@@ -22,7 +22,7 @@ const MyListings = () => {
  
 
   return (
-    <div className="mt-8">
+    <div id="listings" className="mt-8">
       <h2 className="text-lg font-semibold mb-4">My Listings</h2>
       {selectedProducts.length === 0 ? (
         <p className="text-gray-500">You haven't listed any products yet.</p>

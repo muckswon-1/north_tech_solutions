@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import Breadcrumbs from './Breadcrumbs';
 import ProductImageGallery from './ProductImageGallery';
 import ProductInfo from './ProductInfo';
-import AddToInquiry from './AddToInquiry';
+//import AddToInquiry from './AddToInquiry';
 import ProductsSpecs from './ProductsSpecs';
 import RelatedProductsCarousel from './RelatedProductsCarousel';
 
@@ -51,7 +51,7 @@ const ProductDetailsPage = () => {
         <ProductImageGallery product={product} />
         <div>
           <ProductInfo product={product} />
-          <AddToInquiry product={product} />
+          {/* <AddToInquiry product={product} /> */}
         </div>
       </div>
        <ProductsSpecs specs={product.specs} />

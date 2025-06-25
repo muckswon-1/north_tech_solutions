@@ -1,8 +1,10 @@
+
 const {Company} = require('../models')
 const CompanyController = {
     getMyCompany: async (req,res) => {
         try {
-            const company = await Company.findOne({where: {userId: req.user.id}});
+            const {userId} = req.params;
+            const company = await Company.findOne({where: {userId}});
 
             return res.json(company || {})
             
@@ -12,10 +14,13 @@ const CompanyController = {
     },
     createCompany: async (req,res) => {
         try {
-            const existing = await Company.findOne({where: {userId: req.user.id}});
+            const {userId} = req.params;
+
+            const existing = await Company.findOne({where: {userId}});
+
             if(existing) return res.status(400).json({message: 'Company Profile already exists'});
 
-            const company = await Company.create({...req.body, userId: req.user.id});
+            const company = await Company.create({...req.body, userId});
             res.status(201).json(company);
 
         } catch (error) {
@@ -25,13 +30,27 @@ const CompanyController = {
     },
     updateCompany: async (req,res) => {
         try {
-            const existing = await Company.findOne({where: {userId: req.user.id}});
+           const {userId} = req.params;
 
-            if(!existing) return res.status(404).json({message: 'COmpany profile not found.'});
+             const existing = await Company.findOne({where: {userId}});
+            
 
-            await Company.update(req.body);
+
+             if(!existing) return res.status(404).json({message: 'Company profile not found.'});
+
+            const response =  await Company.update(req.body,
+                {
+                    where: {userId},
+                    returning: true
+                }
+            );
+
+            console.log(response);
+           
+            res.json(response);
             
         } catch (error) {
+            console.log(error);
             res.status(500).json({message: 'Server error', error: error.message})
         }
     }

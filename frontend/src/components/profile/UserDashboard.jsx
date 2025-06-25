@@ -2,6 +2,7 @@
 import { useState } from "react";
 import UserAccount from "./manageUserInfo/UserAccount";
 import ProductManager from "./manageUserProducts/ProductManager.jsx";
+import Company from "../company/Company.jsx";
 
 export default function UserDashboard() {
   const [tab, setTab] = useState("account");
@@ -32,11 +33,23 @@ export default function UserDashboard() {
         >
           My Products
         </button>
+        <button
+          onClick={() => setTab("company")}
+          className={`px-4 py-2 text-sm font-medium border-b-2 ${
+            tab === "company"
+              ? "border-blue-500 text-blue-600"
+              : "border-transparent text-gray-500 hover:text-blue-600"
+          }`}
+        >
+          My Company
+        </button>
+
       </div>
 
       {/* Tab Content */}
       {tab === "account" && <UserAccount />}
       {tab === "products" && <ProductManager />}
+      {tab === "company" && <Company />}
     </div>
   );
 }

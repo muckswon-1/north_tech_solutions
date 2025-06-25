@@ -16,9 +16,6 @@ export default function UserAccount() {
   
   const [isEditing, setIsEditing] = useState(false);
 
-  console.log(user);
-
-
   const [initialFormData, setInitialFormData] = useState({
     companyId: user?.companyId || '',
     createdAt: user?.createdAt || '',
@@ -48,6 +45,7 @@ export default function UserAccount() {
     try {
       await dispatch(updateUser(user)).unwrap();
       dispatch(setCurrentUser(user));
+      dispatch(setIsCompleteUserInfo(user));
       setInitialFormData(form);
       setIsDirty(false);
       setIsEditing(false);
@@ -100,6 +98,7 @@ export default function UserAccount() {
   },[authUser,form])
 
 
+console.log(isCompleteUserInfo);
 
 
   return (

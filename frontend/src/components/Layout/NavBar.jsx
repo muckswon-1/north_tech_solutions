@@ -3,11 +3,12 @@ import {  useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser, selectIsAuthenticated, selectUser } from '../../features/auth/authSlice'; // Import the async thunk
 import sokoniLogo from '../../assets/logo.png';
+import { selectUserInquiryDrafts } from '../../features/userInquiryDrafts/userInquiryDraftSlice';
 
 
 const NavBar = () => {
   //use redux toolkit to access inquiry items
-  const { inquiryItems } = useSelector((state) => state.inquiry);
+  const inquiryDraftItems = useSelector(selectUserInquiryDrafts);
   const currentPath = useLocation().pathname;
   const [isSticky, setIsSticky] = useState(false);
   const navbarRef = useRef(null);
@@ -91,9 +92,9 @@ const sessionUser = useSelector(selectUser);
           </Link>
           <Link to={`${sessionUser?.id}/my-inquiries`} className="hover:underline">
             My Inquiries
-            {inquiryItems.length > 0 && (
+            {inquiryDraftItems?.length > 0 && (
               <span className="ml-1 bg-red-600 text-white rounded-full px-2 py-0.5 text-xs">
-                {inquiryItems.length}
+                {inquiryDraftItems.length}
               </span>
             )}
           </Link>
@@ -171,9 +172,9 @@ const sessionUser = useSelector(selectUser);
               >
                 My Inquiries
               </Link>
-              {inquiryItems.length > 0 && (
+              {inquiryDraftItems?.length > 0 && (
                 <span className="absolute top-0 right-0 bg-red-600 text-white rounded-full px-2 py-0.5 text-xs">
-                  {inquiryItems.length}
+                  {inquiryDraftItems.length}
                 </span>
               )}
             </li>

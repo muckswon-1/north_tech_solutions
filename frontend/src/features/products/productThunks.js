@@ -37,7 +37,6 @@ export const listProduct = createAsyncThunk(
 
             const response = await clientCreateProduct(newProduct);
             if(response){
-                toast.success('New product successfully listed');
                 return response
             }
           
