@@ -1,12 +1,15 @@
 
 import { createSlice } from "@reduxjs/toolkit";
-import { createCompany, getMyCompany, updateCompany } from "./companyThunks";
+import { createCompany, getMyCompany, updateCompany, verifyCompanyEmail } from "./companyThunks";
 
 
 
 const  initialState = {
     company:  null,
     isLoading: false,
+    verifiedEmail: false,
+    verifiedPhone: false,
+    companyProfileComplete: false,
     error: null
 }
 
@@ -74,7 +77,19 @@ const companySlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
     })
-        
+
+    .addCase(verifyCompanyEmail.pending, (state) => {
+        state.isLoading = true;
+    })
+    .addCase(verifyCompanyEmail.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.company = action.payload;
+    })
+    .addCase(verifyCompanyEmail.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+    })
+   
     }
         
     
@@ -88,6 +103,6 @@ export const { setCurrentCompany, updateCompanyField, setVerifiedEmail, setVerif
 export const selectCompanyIsLoading = (state) => state.company.isLoading;
 export const selectCompany = (state) => state.company.company;
 export const selectCompanyError = (state) => state.company.error;
-export const selectCompanyVerifiedEmail = (state) => state.company.company.verifiedEmail;
-export const selectCompanyVerifiedPhone = (state) => state.company.company.verifiedPhone;
-export const selectCompanyProfileComplete = (state) => state.company.companyProfileComplete;
+export const selectCompanyVerifiedEmail = (state) => state.company.company?.verifiedEmail;
+export const selectCompanyVerifiedPhone = (state) => state.company.company?.verifiedPhone;
+export const selectCompanyProfileComplete = (state) => state.company?.companyProfileComplete;

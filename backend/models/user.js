@@ -37,7 +37,23 @@ module.exports = (sequelize, DataTypes) => {
     },
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
-    companyId: DataTypes.UUID
+    companyId: DataTypes.UUID,
+    emailVerificationCode:{
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    emailVerificationCodeExpiry: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    resetPasswordToken: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    resetPasswordExpires: {
+      type: DataTypes.DATE,
+      allowNull: true
+    }
   }, {
     sequelize,
     modelName: 'User',

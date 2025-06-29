@@ -1,34 +1,55 @@
 const express = require("express");
-const passwordAuthController = require("../controllers/passwordAuthController");
 const { verifyAccessToken } = require("./verify");
+const register = require("../controllers/auth/register");
+const login = require("../controllers/auth/login");
+const { requestResetPasswordReset, verifyResetPasswordToken, resetPassword } = require("../controllers/auth/passwordReset");
+const { getNewAccessToken } = require("../controllers/auth/newAccessToken");
+const { adminLogin } = require("../admin/auth/adminLogin");
+const { logout } = require("../controllers/auth/logout");
+const { getSessionUser } = require("../controllers/auth/sessionUser");
 
 
 const PasswordAuthRouter = express.Router();
 
 PasswordAuthRouter.post(
-  "/register",
-  passwordAuthController.register,
+  "/register", register
 );
 PasswordAuthRouter.post(
-  "/login",
-  passwordAuthController.login,
+  "/login",login
 );
 PasswordAuthRouter.post(
   "/admin-login",
-  passwordAuthController.adminLogin
+   adminLogin
 )
 PasswordAuthRouter.get(
   "/logout",
-  passwordAuthController.logout,
+  logout
 );
 PasswordAuthRouter.get(
   "/me",
   verifyAccessToken,
-  passwordAuthController.getMe,
+  getSessionUser
 );
 PasswordAuthRouter.post(
   "/refresh",
-  passwordAuthController.getNewAccessToken
+  getNewAccessToken
 )
+
+PasswordAuthRouter.post(
+  "/request-reset-password", requestResetPasswordReset
+);
+
+PasswordAuthRouter.get(
+  "/verify-reset-password-token/:token",
+  verifyResetPasswordToken
+)
+
+PasswordAuthRouter.patch(
+  "/reset-password/:token",
+  resetPassword
+)
+
+
+
 
 module.exports = PasswordAuthRouter;

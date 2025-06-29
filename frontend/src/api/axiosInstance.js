@@ -26,7 +26,7 @@ sokoniApi.interceptors.response.use(
   
     const originalRequest = error.config;
     
-    console.log(originalRequest.url.includes('/refresh'));
+   
 
      if(error?.status === 401 && !originalRequest._retry && !originalRequest.url.includes('/refresh') &&
        !originalRequest.url.includes('/login') &&
@@ -50,7 +50,7 @@ sokoniApi.interceptors.response.use(
     }
    }
    
-   console.log(error?.response?.data)
+
 
    const defaultError = 'Something went wrong. Please refresh and try again.'
 
@@ -59,10 +59,9 @@ sokoniApi.interceptors.response.use(
    )
 
 
-
    customError.status = error?.status || 500;
 
-   console.log(customError);
+  
 
     return Promise.reject(customError);
 }

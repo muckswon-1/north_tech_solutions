@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { AlertTriangle, CheckCircle } from 'lucide-react';
-import { selectCompany, setCurrentCompany, updateCompanyField } from '../../features/company/companySlice';
+import { selectCompany, selectCompanyVerifiedEmail, selectCompanyVerifiedPhone, setCurrentCompany, updateCompanyField } from '../../features/company/companySlice';
 import { getMyCompany, updateCompany } from '../../features/company/companyThunks';
 import { selectUser } from '../../features/auth/authSlice';
+import { Link } from 'react-router-dom';
 
 
 
@@ -15,8 +16,8 @@ const CompanyInfo = () => {
     const authUser = useSelector(selectUser);
     const [isEditing, setIsEditing] = useState(false);
     const [isDirty, setIsDirty] = useState(false);
-    const isVerifiedEmail =true;
-    const isVerifiedPhone = true;
+    const isVerifiedEmail = useSelector(selectCompanyVerifiedEmail)
+    
 
 
 
@@ -121,7 +122,7 @@ const CompanyInfo = () => {
 
         {/* Verification Summary */}
 <div className="mt-4 space-y-2">
-  {isVerifiedEmail && isVerifiedPhone ? (
+  {isVerifiedEmail ? (
     <div className="flex items-center text-green-700 bg-green-50 p-3 rounded border border-green-300">
       <CheckCircle className="w-5 h-5 mr-2 text-green-600" />
       <span className="font-medium">Your company is fully verified and ready to list products.</span>
@@ -133,10 +134,15 @@ const CompanyInfo = () => {
         <div>
           <p className="font-semibold">Verification Required:</p>
           <ul className="list-disc list-inside text-sm mt-1 space-y-1">
-            {!isVerifiedEmail && <li>Email address is not verified.</li>}
-            {!isVerifiedPhone && <li>Phone number is not verified.</li>}
+            {!isVerifiedEmail && 
+            <li>Email address is not verified.</li>
+           
+            }
+            {!isVerifiedPhone &&
+            <li>Phone number is not verified.</li>
+            }
           </ul>
-          <p className="text-sm mt-2">Please verify these details in your profile settings to unlock full features.</p>
+          <Link to={`/${authUser.id}/verification-center`} className="text-blue-600 hover:underline">Please verify these details in your profile settings to unlock full features.</Link>
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@ import { selectUserInquiryDrafts } from '../../features/userInquiryDrafts/userIn
 
 
 const NavBar = () => {
-  //use redux toolkit to access inquiry items
+  
   const inquiryDraftItems = useSelector(selectUserInquiryDrafts);
   const currentPath = useLocation().pathname;
   const [isSticky, setIsSticky] = useState(false);
@@ -37,14 +37,11 @@ const sessionUser = useSelector(selectUser);
   };
 
   useEffect(() => {
-    
-     if(sessionUser && isAuthenticated) {
-      setShowLogoutButton(isAuthenticated);
-     }else{
-      navigate('/login');
+    if (isAuthenticated && sessionUser) {
+      setShowLogoutButton(true);
+    }else {
       setShowLogoutButton(false);
-     }
-   
+    }
   }, [isAuthenticated, sessionUser]);
 
 

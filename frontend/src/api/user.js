@@ -64,3 +64,15 @@ export const clientDeleteUser = async (id) => {
         throw error
     }
 }
+
+
+export const clientUserResetPassword = async (payload) => {
+    try {
+        const response = await sokoniApi.patch(`${usersBasePath}/${payload.id}/user-reset-password`,payload);
+        if(response.status === 200){
+            return response
+        }
+    } catch (error) {
+        throw error
+    }
+}

@@ -23,7 +23,7 @@ const InquiryController = {
   },
   createInquiry: async (req, res) => {
     try {
-    
+   
 
     /**
      * GET THE COMPANY 
@@ -32,14 +32,13 @@ const InquiryController = {
     const inquiryInfo = req.body;
     const transaction = await sequelize.transaction();
 
-    console.log(inquiryInfo);
+   
     
     
     const company = await Company.findOne({where: {userId}});
     if(!company) {
       res.status(400).json({message: 'Company not found'});
     }
-
 
      const newInquiry = await Inquiry.create(
       {

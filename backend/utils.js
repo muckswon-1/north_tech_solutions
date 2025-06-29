@@ -1,6 +1,41 @@
 const nodemailer = require("nodemailer");
 const { DateTime } = require("luxon");
 const winston = require('winston');
+const PasswordValidator = require("password-validator");
+require("dotenv").config({ path: ".env.development" });
+
+
+
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: process.env.ADMIN_EMAIL,
+    pass: process.env.ADMIN_EMAIL_PASSWORD,
+  
+  }
+});
+
+
+
+
+const generateCode = () => Math.floor(100000 + Math.random() * 900000).toString();
+
+
+const sendVerificationEmail = async (email, code) => {
+  await transporter.sendMail({
+    from: `${process.env.ADMIN_EMAIL}`,
+    to: email,
+    subject: "Your Sokoni B2B Verification Code",
+    html: `<p>Your verification code is: <strong>${code}</strong></p>`,
+  });
+
+}
+
+
+
+
+
+
 
 //get start time and end time
 const getStartTimeAndEndTime = (
@@ -54,6 +89,7 @@ const getCalendarId = async (calendar, calendarSummary, google_auth) => {
 };
 
 const sendMail = async () => {
+
   const mailOptions = {
     from: "muckswon@electricaldistribution.ca",
     to: email,
@@ -97,10 +133,36 @@ const infoLogger = winston.createLogger({
 })
 
 
+let passwordSchema = new PasswordValidator();
+
+passwordSchema
+.is().min(8)
+.is().max(100)
+.has().uppercase()
+.has().lowercase()
+.has().symbols()
+.has().digits()
+.has().not().spaces()
+.is().not().oneOf(['Passw0rd', 'Password123']);
+
+
+const hashPassword = async (password) => {
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  return hashedPassword
+}
+
+
+
+
+
 
 
 module.exports = {
   getCalendarId,
   sendMail,
   getStartTimeAndEndTime,
+  generateCode,
+  sendVerificationEmail,
+  passwordSchema
 };

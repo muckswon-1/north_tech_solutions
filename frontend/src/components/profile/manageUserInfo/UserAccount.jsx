@@ -171,7 +171,7 @@ console.log(isCompleteUserInfo);
     }
 
 <Link
-          to="/reset-password"
+          to={`/${authUser.id}/reset-password`}
           className="ml-auto text-blue-600 hover:underline self-center text-sm"
         >
           Reset Password

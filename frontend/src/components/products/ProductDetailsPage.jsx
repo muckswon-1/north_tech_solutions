@@ -2,12 +2,12 @@ import { useParams } from 'react-router-dom';
 import Breadcrumbs from './Breadcrumbs';
 import ProductImageGallery from './ProductImageGallery';
 import ProductInfo from './ProductInfo';
-//import AddToInquiry from './AddToInquiry';
+import AddToInquiry from './AddToInquiry';
 import ProductsSpecs from './ProductsSpecs';
 import RelatedProductsCarousel from './RelatedProductsCarousel';
 
 import { useDispatch, useSelector } from 'react-redux';
-import {   selectProductsError, selectProductsIsLoading } from '../../features/products/productSlice';
+import {   selectCurrentProductDraft, selectProductsError, selectProductsIsLoading } from '../../features/products/productSlice';
 import { useEffect } from 'react';
 import { fetchProductById } from '../../features/products/productThunks';
 const ProductDetailsPage = () => {
@@ -15,8 +15,10 @@ const ProductDetailsPage = () => {
 
   const loading = useSelector(selectProductsIsLoading);
   const error = useSelector(selectProductsError);
-  const product = {}
+  const product = useSelector(selectCurrentProductDraft);
   const dispatch = useDispatch();
+
+  console.log(product);
 
 
 //croll to the top of the page when the component mounts
@@ -50,14 +52,14 @@ const ProductDetailsPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ProductImageGallery product={product} />
         <div>
-          <ProductInfo product={product} />
-          {/* <AddToInquiry product={product} /> */}
+           <ProductInfo product={product} />
+           <AddToInquiry product={product} /> 
         </div>
       </div>
-       <ProductsSpecs specs={product.specs} />
+       {/* <ProductsSpecs specs={product.specs} /> */}
         </>
       )} 
-      <RelatedProductsCarousel />
+      {/* <RelatedProductsCarousel /> */}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 const envFile = require('../envConfig');
-require("dotenv").config({ path: envFile });
+require("dotenv").config({ path: ".env.development" });
 
 console.log();
 

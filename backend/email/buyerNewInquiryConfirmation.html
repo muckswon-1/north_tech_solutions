@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Inquiry Confirmation - Sokoni B2B</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            padding: 0;
+            margin: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            color: #2d3748;
+            margin-bottom: 16px;
+        }
+
+        p {
+            margin-bottom: 16px;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        .summary-table th,
+        .summary-table td {
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .summary-table th {
+            background-color: #f9fafb;
+        }
+
+        .footer {
+            margin-top: 24px;
+            font-size: 13px;
+            text-align: center;
+            color: #718096;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>✅ Your Inquiry Was Submitted Successfully</h2>
+
+        <p>Hi {{SENDER_NAME}},</p>
+
+        <p>
+            Thank you for your inquiry on <strong>Sokoni B2B</strong>. We've forwarded your message to the respective
+            supplier. You’ll be notified as soon as they respond.
+        </p>
+
+        <h3>📝 Inquiry Summary</h3>
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{INQUIRY_ROWS}}
+            </tbody>
+        </table>
+
+        <p>You can view or manage your inquiries in your dashboard:</p>
+        <p>
+            🔗 <a href="{{DASHBOARD_LINK}}" target="_blank">Go to My Inquiries</a>
+        </p>
+
+        <p>Thank you for using Sokoni B2B!</p>
+
+        <div class="footer">
+            &copy; {{CURRENT_YEAR}} Sokoni B2B. Empowering Global Trade.
+        </div>
+    </div>
+</body>
+
+</html>

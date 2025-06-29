@@ -20,6 +20,9 @@ import InquiryDraftsPage from './components/inquiryDrafts/InquiryDraftsPage';
 import { selectUserInquiryDrafts, setUserInquiryDrafts } from './features/userInquiryDrafts/userInquiryDraftSlice';
 import { selectUser } from './features/auth/authSlice';
 import { fetchUserInquiryDrafts } from './features/userInquiryDrafts/userInquiryDraftThunks';
+import VerificationCenter from './components/verificationCenter/VerificationCenter';
+import ResetPassword from './components/auth/ResetPassword';
+import ForgotPasswordForm from './components/auth/ForgotPasswordForm';
 
 
 
@@ -34,8 +37,10 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchUserInquiryDrafts(authUser?.id))
-    dispatch(setUserInquiryDrafts(userInquiryDrafts));
+    if(authUser) {
+      dispatch(fetchUserInquiryDrafts(authUser?.id))
+      dispatch(setUserInquiryDrafts(userInquiryDrafts));
+    }
   },[dispatch]);
   
 
@@ -69,6 +74,20 @@ function App() {
                 <UserDashboard />
               </RequireAuth>
             } />
+              <Route path='/:id/verification-center' element={
+              <RequireAuth>
+                <VerificationCenter />
+              </RequireAuth>
+            } />
+
+<Route path='/:id/reset-password' element={
+              <RequireAuth>
+                <ResetPassword />
+              </RequireAuth>
+            } />
+
+<Route path="forgot-password" element={<ForgotPasswordForm />} />
+<Route path="reset-password/:token" element={<ResetPassword />} />
           </Routes>
         </Layout>
       </Router>

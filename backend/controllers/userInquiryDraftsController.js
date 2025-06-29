@@ -1,6 +1,6 @@
-const { clear } = require('winston');
+
 const {UserInquiryDraft, Product} = require('../models');
-const { get } = require('../routes/inquiryRoutes');
+
 
 module.exports = {
     getUserDraftInquiries: async (req, res) => {
@@ -16,8 +16,7 @@ module.exports = {
                         
                     }
                 ]
-                
-
+            
             });
             res.json(inquiries);
         } catch (err) {
@@ -40,7 +39,7 @@ module.exports = {
     createUserDraftInquiry: async (req, res) => {
         try {
             const {userId} = req.params;
-             
+             console.log(req.body);
             const inquiry = await UserInquiryDraft.create({userId, ...req.body});
              res.json(inquiry);
     

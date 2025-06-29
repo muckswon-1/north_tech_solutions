@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Building2, CheckCheck, AlertTriangle, Minus, Plus, Trash2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
@@ -9,12 +9,14 @@ import { createInquiryDraft, updateInquiryDraftQuantity } from '../../features/u
 import { selectCompany } from '../../features/company/companySlice';
 import { selectUserInquiryDrafts } from '../../features/userInquiryDrafts/userInquiryDraftSlice';
 import InquiryDraftQuantity from '../inquiryDrafts/InquiryDraftQuantity';
+import { setCurrentProductDraft } from '../../features/products/productSlice';
 
 const ProductCard = ({ product }) => {
   const authUser = useSelector(selectUser);
   const dispatch = useDispatch();
   const currentUserCompany = useSelector(selectCompany);
   const userDraftInquiries = useSelector(selectUserInquiryDrafts);
+  const navigate = useNavigate();
 
   const isInInquiryDraft = userDraftInquiries?.some((draft) => draft.productId === product.id);
   const productInquiryDraft = userDraftInquiries?.find(draft => draft.productId === product.id);
@@ -40,6 +42,13 @@ const ProductCard = ({ product }) => {
       toast.error('Failed to add product to inquiry');
     }
   };
+
+
+  const handleViewDetails = () => {
+    dispatch(setCurrentProductDraft(product));
+    navigate(`/products/${id}`);
+  };
+
 
 
 
@@ -130,9 +139,9 @@ const ProductCard = ({ product }) => {
 
       {/* Links */}
       <div className="mt-3 flex justify-between text-sm text-blue-600">
-        <Link to={`/products/${id}`} className="hover:underline">View Details</Link>
-        {!isOwner && (
-          <Link to="/inquiry" className="hover:underline">View in Inquiries</Link>
+        <button onClick={handleViewDetails} className="hover:underline">View Details</button>
+        {!isOwner &&  authUser && (
+          <Link to={`/${authUser.id}/my-inquiries`} className="hover:underline">View in Inquiries</Link>
         )}
       </div>
     </div>

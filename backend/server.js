@@ -25,6 +25,7 @@ const uploadRouter = require("./routes/uploads");
 const CompanyRouter = require("./routes/companyRoute");
 
 const UserDraftInquiryRouter = require("./routes/userDraftInquiryRoute");
+const VerificationCenterRouter = require("./routes/verificationCenterRoute");
 
 require("dotenv").config({ path: envFile });
 
@@ -121,6 +122,10 @@ app.use("/api/company",CompanyRouter);
 
 //INQUIRY DRAFT
 app.use("/api/inquiry-drafts",UserDraftInquiryRouter);
+
+// VERIFICATION CENTER
+app.use("/api/verification-center",VerificationCenterRouter);
+
 
 //Log error
 

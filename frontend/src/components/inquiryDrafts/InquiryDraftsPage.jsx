@@ -7,7 +7,7 @@ import { fetchUserInquiryDrafts } from '../../features/userInquiryDrafts/userInq
 import { selectUser } from '../../features/auth/authSlice';
 import InquiryDraft from './InquiryDraft';
 import { selectUserLoading } from '../../features/users/usersSlice';
-import { selectCompanyProfileComplete, setCompanyProfileComplete } from '../../features/company/companySlice';
+import { selectCompanyProfileComplete, selectCompanyVerifiedEmail, setCompanyProfileComplete } from '../../features/company/companySlice';
 import DraftInquiryMessage from './DraftInquiryMessage';
 
 
@@ -16,15 +16,18 @@ const InquiryDraftsPage = () => {
 
 
   const authUser = useSelector(selectUser);
-  const isCompanyProfileComplete = true;
+ const isEmailVerified = useSelector(selectCompanyVerifiedEmail);
   const dispatch = useDispatch();
   const isLoading = useSelector(selectUserLoading);
 
 
  useEffect(() => {
-  dispatch(fetchUserInquiryDrafts(authUser.id));
+  
+  if(authUser) {
+    dispatch(fetchUserInquiryDrafts(authUser.id));
   dispatch(setUserInquiryDrafts(inquiryDrafts));
-  dispatch(setCompanyProfileComplete());
+
+  }
 
  },[dispatch])
 
@@ -62,6 +65,7 @@ const InquiryDraftsPage = () => {
               <InquiryDraft
                 key={inquiry.id}
                 draft={inquiry}
+                productId={inquiry.productId}
               />
             ))
           }
@@ -75,7 +79,7 @@ const InquiryDraftsPage = () => {
       <div className="bg-white p-6 rounded-lg shadow border">
         <h2 className="text-xl font-semibold mb-4">Submit Your Inquiry</h2>
 
-        {!isCompanyProfileComplete ? (
+        {!isEmailVerified ? (
           <div className="text-red-600 font-medium bg-red-50 p-4 rounded border border-red-200">
             You must complete your company profile before submitting an inquiry.
             <Link

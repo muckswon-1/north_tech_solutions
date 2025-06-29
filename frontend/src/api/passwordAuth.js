@@ -73,3 +73,42 @@ export const clientHandleRefreshToken = async () => {
      throw error;
   }
 }
+
+
+export const clientResetPasswordEmail = async (email) => {
+  try {
+    const response = await sokoniApi.post(`${authServicePath}/request-reset-password`, {
+      email,
+    });
+
+    return response;
+
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const clientVerifyResetPasswordToken = async (token) => {
+  try {
+    const response = await sokoniApi.get(`${authServicePath}/verify-reset-password-token/${token}`);
+
+    return response;
+
+  } catch (error) {
+    throw error;
+  
+  }
+}
+
+
+export const clientResetPassword = async (payload) => {
+  try {
+    const response = await sokoniApi.patch(`${authServicePath}/reset-password/${payload.token}`, {password: payload.password});
+
+    return response;
+
+  } catch (error) {
+    throw error;
+  }
+}
+

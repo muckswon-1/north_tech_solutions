@@ -2,21 +2,28 @@ import { Check, Pencil, Trash2, X } from 'lucide-react';
 import React, {  useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteInquiryDraft, fetchUserInquiryDrafts, updateInquiryDraftQuantity } from '../../features/userInquiryDrafts/userInquiryDraftThunks';
-import { selectUser } from '../../features/auth/authSlice';
-import { setUserInquiryDrafts } from '../../features/userInquiryDrafts/userInquiryDraftSlice';
+import { selectIsAuthenticated, selectUser } from '../../features/auth/authSlice';
+import { selectUserInquiryDrafts, setUserInquiryDrafts } from '../../features/userInquiryDrafts/userInquiryDraftSlice';
 
 
 
-const InquiryDraft = ({draft}) => {
+const InquiryDraft = ({productId}) => {
+
+    const dispatch = useDispatch();
+ 
     const authUser = useSelector(selectUser);
+    const inquiryDrafts = useSelector(selectUserInquiryDrafts);
+    const isAuthenticated = useSelector(selectIsAuthenticated);
+    const draft = inquiryDrafts?.find((d) => d.productId === productId);
+
     const [isEditing, setIsEditing] = useState(false);
     const [originalQuantity, setOriginalQuantity] = useState(draft?.quantity);
     const [quantity, setQuantity] = useState(originalQuantity);
-    
-    const dispatch = useDispatch();
-
    
 
+    
+   
+  
     const handleDeleteDraft = () => {
         dispatch(deleteInquiryDraft({userId:authUser.id ,inquiryDraftId: draft.id}));
         
@@ -36,6 +43,14 @@ const InquiryDraft = ({draft}) => {
       setOriginalQuantity(quantity);
       setIsEditing(false);
     };
+
+    useEffect(() => {
+      if(authUser && isAuthenticated){
+        dispatch(fetchUserInquiryDrafts(authUser.id));
+      }
+    
+    }, [dispatch,quantity])
+  
     
     return (
         <div className="flex items-center justify-between p-4 border rounded-lg shadow-sm bg-white">

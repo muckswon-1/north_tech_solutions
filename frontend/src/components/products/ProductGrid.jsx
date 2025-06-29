@@ -15,8 +15,10 @@ const ProductGrid = () => {
   
 
   useEffect(() => {
+   if(authUser) {
     dispatch(fetchUserInquiryDrafts(authUser?.id));
     dispatch(setUserInquiryDrafts(userInquiryDrafts));
+   }
 
   },[authUser, dispatch])
 

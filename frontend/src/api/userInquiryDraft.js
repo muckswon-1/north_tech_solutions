@@ -38,6 +38,7 @@ export const clientUpdateInquiryDraft = async (payload) => {
 
 export const clientCreateInquiryDraft = async (payload) => {
     try {
+        console.log(payload);
         const {userId, inquiryDraft} = payload
        
         const response = await sokoniApi.post(`${baseRoute}/${userId}`, inquiryDraft);

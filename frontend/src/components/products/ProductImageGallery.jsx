@@ -6,7 +6,8 @@ import { useEffect } from 'react';
 
 const ProductImageGallery = ({ product }) => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const images = [product.image_url, ...(product.additional_images || [])];
+  const images = [product.imageUrl, ...product.additionalImagesUrls]
+  
 
   const [sliderRef] = useKeenSlider({
     mode: 'free',

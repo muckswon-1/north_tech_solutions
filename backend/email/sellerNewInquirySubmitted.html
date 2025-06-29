@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>New Inquiry Received - Sokoni B2B</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            padding: 0;
+            margin: 0;
+            color: #333;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            color: #2d3748;
+            margin-bottom: 16px;
+        }
+
+        p {
+            margin-bottom: 16px;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        .summary-table th,
+        .summary-table td {
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .summary-table th {
+            background-color: #f9fafb;
+        }
+
+        .footer {
+            margin-top: 24px;
+            font-size: 13px;
+            text-align: center;
+            color: #718096;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <h2>📩 New Inquiry for Your Products</h2>
+        <p>Dear {{BUYER_NAME}},</p>
+
+        <p>You have received a new product inquiry on <strong>Sokoni B2B</strong> from <strong>{{SENDER_NAME}}</strong>.
+        </p>
+
+        <h3>📝 Inquiry Details</h3>
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{INQUIRY_ROWS}}
+            </tbody>
+        </table>
+
+        <p>You can reply to the sender directly or view the inquiry in your dashboard.</p>
+
+        <p>
+            🔗 <a href="{{DASHBOARD_LINK}}" target="_blank">View Inquiry in Dashboard</a>
+        </p>
+
+        <div class="footer">
+            &copy; {{CURRENT_YEAR}} Karibu Sokni.
+        </div>
+    </div>
+</body>
+
+</html>
