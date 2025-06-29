@@ -39,7 +39,6 @@ module.exports = {
     createUserDraftInquiry: async (req, res) => {
         try {
             const {userId} = req.params;
-             console.log(req.body);
             const inquiry = await UserInquiryDraft.create({userId, ...req.body});
              res.json(inquiry);
     

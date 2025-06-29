@@ -16,7 +16,6 @@ const { authUrl, oauth2Client } = require("./google_auth");
 const googleCalender = require("./calendar");
 const ProductRouter = require("./routes/productRoutes");
 const InquiryRouter = require("./routes/inquiryRoutes");
-const envFile = require("./envConfig");
 const PasswordAuthRouter = require("./routes/passwordAuthRoutes");
 const path = require("path");
 const db = require("./models");
@@ -26,8 +25,12 @@ const CompanyRouter = require("./routes/companyRoute");
 
 const UserDraftInquiryRouter = require("./routes/userDraftInquiryRoute");
 const VerificationCenterRouter = require("./routes/verificationCenterRoute");
+const { loadEnvfile } = require("./utils");
 
-require("dotenv").config({ path: envFile });
+
+loadEnvfile();
+
+
 
 //Global Constant variables
 const port = process.env.SERVER_PORT || 3000;
@@ -213,8 +216,6 @@ app.use(errorHandler({server: server}));
 app.listen(port, "0.0.0.0", () => {
   console.log("NODE_ENV: ",process.env.NODE_ENV)
   
-  process.env.NODE_ENV === "development" ?  console.log(
-    `Sokoni app listening on ${process.env.BACKEND_URL}`,
-  )
-  : '';
+  console.log(`Sokoni app listening on ${process.env.BACKEND_URL}`);
+ 
 });

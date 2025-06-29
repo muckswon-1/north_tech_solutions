@@ -2,7 +2,22 @@ const nodemailer = require("nodemailer");
 const { DateTime } = require("luxon");
 const winston = require('winston');
 const PasswordValidator = require("password-validator");
-require("dotenv").config({ path: ".env.development" });
+require("dotenv").config();
+
+const loadEnvfile = () => {
+  if (process.env.NODE_ENV === "production") {
+    require("dotenv").config({ path: ".env.production" });
+  } else if(process.env.NODE_ENV === "staging") {
+    require("dotenv").config({ path: ".env.staging" });
+  }else {
+    require("dotenv").config({ path: ".env.development" });
+  }
+
+
+};
+
+loadEnvfile();
+
 
 
 
@@ -16,9 +31,10 @@ const transporter = nodemailer.createTransport({
 });
 
 
-
-
 const generateCode = () => Math.floor(100000 + Math.random() * 900000).toString();
+
+
+
 
 
 const sendVerificationEmail = async (email, code) => {
@@ -164,5 +180,6 @@ module.exports = {
   getStartTimeAndEndTime,
   generateCode,
   sendVerificationEmail,
-  passwordSchema
+  passwordSchema,
+  loadEnvfile
 };

@@ -1,8 +1,3 @@
-const envFile = require('../envConfig');
-require("dotenv").config({ path: ".env.development" });
-
-console.log();
-
 
 module.exports = {
   development: {
