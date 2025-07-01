@@ -2,23 +2,9 @@ const nodemailer = require("nodemailer");
 const { DateTime } = require("luxon");
 const winston = require('winston');
 const PasswordValidator = require("password-validator");
-const db = require("./models");
-
-require("dotenv").config();
-
-const loadEnvfile = () => {
-  if (process.env.NODE_ENV === "production") {
-    require("dotenv").config({ path: ".env.production" });
-  } else if(process.env.NODE_ENV === "staging") {
-    require("dotenv").config({ path: ".env.staging" });
-  }else {
-    require("dotenv").config({ path: ".env.development" });
-  }
 
 
-};
 
-loadEnvfile();
 
 
 const transporter = nodemailer.createTransport({
@@ -72,15 +58,7 @@ const getAllowedOrigins = () => {
 
 }
 
-async function initalizeDB(){
-  try {
-    await db.sequelize.authenticate();
-    console.log('Databse connection has been established successfully')
-    
-  } catch (error) {
-    throw error
-  }
-}
+
 
 
 
@@ -256,9 +234,9 @@ module.exports = {
   generateCode,
   sendVerificationEmail,
   passwordSchema,
-  loadEnvfile,
+
   getAllowedOrigins,
   infoLogger,
   hashPassword,
-  initalizeDB
+
 };

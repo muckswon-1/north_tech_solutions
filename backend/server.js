@@ -25,16 +25,17 @@ const CompanyRouter = require("./routes/companyRoute");
 
 const UserDraftInquiryRouter = require("./routes/userDraftInquiryRoute");
 const VerificationCenterRouter = require("./routes/verificationCenterRoute");
-const { loadEnvfile, getAllowedOrigins, initalizeDB } = require("./utils");
+const {  getAllowedOrigins } = require("./utils");
+const { loadDatabase } = require("./utils/loadDb");
+const { loadEnvfile } = require("./utils/loadEnvfile");
 
-
-
-initalizeDB();
+loadEnvfile();
 
 //Global Constant variables
 const port = process.env.SERVER_PORT
 
 
+loadDatabase();
 
 app.use(cors(getAllowedOrigins()));
 app.use(express.json());
@@ -164,9 +165,4 @@ app.post("/schedule-meeting", async (req, res) => {
 app.use(errorHandler({server: server}));
 
 // START SERVER
-app.listen(port, "0.0.0.0", () => {
-  console.log("NODE_ENV: ",process.env.NODE_ENV)
-  
-  console.log(`Sokoni app listening on ${process.env.BACKEND_URL}`);
- 
-});
+app.listen(port, "0.0.0.0", () => { console.log(`Sokoni app listening on ${process.env.BACKEND_URL}`) });

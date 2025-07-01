@@ -1,3 +1,6 @@
+const { loadEnvfile } = require("../utils/loadEnvfile")
+
+loadEnvfile();
 
 module.exports = {
   development: {
