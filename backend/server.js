@@ -37,7 +37,9 @@ const port = process.env.SERVER_PORT
 
 loadDatabase();
 
-app.use(cors(getAllowedOrigins()));
+const corsOptions = getAllowedOrigins();
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
