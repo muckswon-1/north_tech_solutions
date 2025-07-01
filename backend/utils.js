@@ -2,6 +2,8 @@ const nodemailer = require("nodemailer");
 const { DateTime } = require("luxon");
 const winston = require('winston');
 const PasswordValidator = require("password-validator");
+const db = require("./models");
+
 require("dotenv").config();
 
 const loadEnvfile = () => {
@@ -19,8 +21,6 @@ const loadEnvfile = () => {
 loadEnvfile();
 
 
-
-
 const transporter = nodemailer.createTransport({
   service: "Gmail",
   auth: {
@@ -35,8 +35,6 @@ const generateCode = () => Math.floor(100000 + Math.random() * 900000).toString(
 
 
 
-
-
 const sendVerificationEmail = async (email, code) => {
   await transporter.sendMail({
     from: `${process.env.ADMIN_EMAIL}`,
@@ -46,6 +44,83 @@ const sendVerificationEmail = async (email, code) => {
   });
 
 }
+
+
+const getAllowedOrigins = () => {
+  const allowedOrigins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://192.168.0.102:5173",
+    "https://staging-sokoni.muckswon.com",
+    "https://sokoni.muckswon.com/"
+
+  ]
+
+  return {
+    origin: (origin, callback) => {
+      //Allow requests with no origins
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  }
+
+}
+
+async function initalizeDB(){
+  try {
+    await db.sequelize.authenticate();
+    console.log('Databse connection has been established successfully')
+    
+  } catch (error) {
+    throw error
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -181,5 +256,9 @@ module.exports = {
   generateCode,
   sendVerificationEmail,
   passwordSchema,
-  loadEnvfile
+  loadEnvfile,
+  getAllowedOrigins,
+  infoLogger,
+  hashPassword,
+  initalizeDB
 };

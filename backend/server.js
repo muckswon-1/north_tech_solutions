@@ -25,74 +25,25 @@ const CompanyRouter = require("./routes/companyRoute");
 
 const UserDraftInquiryRouter = require("./routes/userDraftInquiryRoute");
 const VerificationCenterRouter = require("./routes/verificationCenterRoute");
-const { loadEnvfile } = require("./utils");
+const { loadEnvfile, getAllowedOrigins, initalizeDB } = require("./utils");
 
 
-loadEnvfile();
 
-
+initalizeDB();
 
 //Global Constant variables
-const port = process.env.SERVER_PORT || 3000;
+const port = process.env.SERVER_PORT
 
-//  MIDDLEWARE - CORS Configuration
-const whitelist = [
-  process.env.FRONTEND_URL, // Your primary frontend URL from .env
-];
 
-// In development, allow common local network IP patterns for the frontend port
-if (process.env.NODE_ENV === "development") {
-  const vitePort = 5173; // Assuming this is your Vite frontend port
-  // Regex for common private IP ranges (192.168.x.x, 10.x.x.x, 172.16.x.x-172.31.x.x)
-  // and localhost/127.0.0.1
-  const localNetworkOriginRegex = new RegExp(
-    `^http:\/\/(localhost|127\\.0\\.0\\.1|192\\.168\\.\\d{1,3}\\.\\d{1,3}|10\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|172\\.(1[6-9]|2\\d|3[01])\\.\\d{1,3}\\.\\d{1,3}):${vitePort}$`,
-  );
-  whitelist.push(localNetworkOriginRegex);
-}
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-
-    const isWhitelisted = whitelist.some((allowedOrigin) => {
-      return typeof allowedOrigin === "string"
-        ? allowedOrigin === origin
-        : allowedOrigin.test(origin);
-    });
-
-    if (isWhitelisted) {
-      callback(null, true);
-    } else {
-      callback(new Error(`Origin ${origin} not allowed by CORS`));
-    }
-  },
-  credentials: true,
-};
-
-const staticFilesDir = '/var/www/sokoni.muckswon.com'
-app.use(cors(corsOptions));
+app.use(cors(getAllowedOrigins()));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan("dev"));
-app.use(express.static(staticFilesDir));
 app.use('/uploads',express.static('uploads'))
 
 
-
-async function initalizeDB(){
-  try {
-    await db.sequelize.authenticate();
-    console.log('Databse connection has been established successfully')
-    
-  } catch (error) {
-    throw error
-  }
-}
-
-initalizeDB();
 
 
 // TEST ROUTE
