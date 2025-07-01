@@ -38,16 +38,20 @@ const getAllowedOrigins = () => {
     "http://127.0.0.1:5173",
     "http://192.168.0.102:5173",
     "https://staging-sokoni.muckswon.com",
-    "https://sokoni.muckswon.com/"
+    "https://sokoni.muckswon.com"
 
   ]
 
   return {
     origin: (origin, callback) => {
       //Allow requests with no origins
-      if (!origin) return callback(null, true);
+      if (!origin) {
+        console.log('No origin', origin)
+        return callback(null, true);
+      }
 
       if (allowedOrigins.includes(origin)) {
+        console.log('Allowed: ', allowedOrigins.includes(origin))
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));

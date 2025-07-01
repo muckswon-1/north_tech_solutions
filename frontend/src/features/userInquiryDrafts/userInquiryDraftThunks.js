@@ -98,11 +98,10 @@ export const submitInquiry = createAsyncThunk(
    
     try {
        const response = await clientCreateInquiry(payload);
-       return response;
-       
-    //   if(response.status === 201){
-    //     return response.data.inquiryId; 
-    //    }
+
+      if(response.status === 201){
+        return response.data.inquiryId; 
+       }
     } catch (error) {
      
       return thunkApi.rejectWithValue(error.message);

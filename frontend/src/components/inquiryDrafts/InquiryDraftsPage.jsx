@@ -25,7 +25,7 @@ const InquiryDraftsPage = () => {
   
   if(authUser) {
     dispatch(fetchUserInquiryDrafts(authUser.id));
-  dispatch(setUserInquiryDrafts(inquiryDrafts));
+   dispatch(setUserInquiryDrafts(inquiryDrafts));
 
   }
 
