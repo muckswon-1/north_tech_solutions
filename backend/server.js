@@ -39,6 +39,9 @@ loadDatabase();
 
 const corsOptions = getAllowedOrigins();
 
+
+console.log(corsOptions)
+
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -167,4 +170,4 @@ app.post("/schedule-meeting", async (req, res) => {
 app.use(errorHandler({server: server}));
 
 // START SERVER
-app.listen(port, "0.0.0.0", () => { console.log(`Sokoni app listening on ${process.env.BACKEND_URL}`) });
+app.listen(port, "localhost", () => { console.log(`Sokoni app listening on ${process.env.BACKEND_URL}`) });

@@ -18,9 +18,7 @@ const ProductDetailsPage = () => {
   const product = useSelector(selectCurrentProductDraft);
   const dispatch = useDispatch();
 
-  console.log(product);
-
-
+  
 //croll to the top of the page when the component mounts
   useEffect(() => {
     window.scrollTo(0, 0);

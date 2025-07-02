@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { checkAuthStatus, logoutUser, newAccessToken } from '../features/auth/authSlice';
+
 import store from '../app/store';
+import { logoutUser, newAccessToken } from '../features/auth/AuthThunks';
 const SERVER_URL = `${import.meta.env.VITE_BACKEND_URL}/api`;
 
 

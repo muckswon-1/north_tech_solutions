@@ -7,7 +7,7 @@ import { removeSpecifications, selectSpecifications, setSpecifications, updateSp
 const ProductSpecs = () => {
 
   const specs = useSelector(selectSpecifications);
-  console.log(specs);
+  
 
   const dispatch = useDispatch();
 

@@ -9,97 +9,98 @@ import {
   clientHandleRefreshToken,
 } from '../../api/passwordAuth';
 import toast from 'react-hot-toast';
+import { checkAuthStatus, loginUser, logoutUser, newAccessToken, registerUser } from './AuthThunks';
 
-export const loginUser = createAsyncThunk(
-  'userPasswordAuth/loginUser',
-  async (userCredentials, thunkAPI) => {
-    try {
-      const response = await clientLogin(userCredentials);
-      toast.success('Logged in successfully.')
-      return response;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error?.message);
-    }
-  },
-);
+// export const loginUser = createAsyncThunk(
+//   'userPasswordAuth/loginUser',
+//   async (userCredentials, thunkAPI) => {
+//     try {
+//       const response = await clientLogin(userCredentials);
+//       toast.success('Logged in successfully.')
+//       return response;
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(error?.message);
+//     }
+//   },
+// );
 
 
 
 // Async thunk for registration
-export const registerUser = createAsyncThunk(
-  'userPasswordAuth/registerUser',
-  async (user, thunkAPI) => {
-    try {
-      const response = await clientRegister(user);
+// export const registerUser = createAsyncThunk(
+//   'userPasswordAuth/registerUser',
+//   async (user, thunkAPI) => {
+//     try {
+//       const response = await clientRegister(user);
     
-      return response;
-    } catch (error) {
+//       return response;
+//     } catch (error) {
 
-      return thunkAPI.rejectWithValue(error?.message || 'Registration failed');
-    }
-  },
-);
+//       return thunkAPI.rejectWithValue(error?.message || 'Registration failed');
+//     }
+//   },
+// );
 
-export const checkAuthStatus = createAsyncThunk(
-  'userPasswordAuth/checkAuthStatus',
-  async (_, thunkAPI) => {
-    try {
-      const data = await fetchCurrentUser(); // Now returns { user: ... } or { user: null } if 401 occurred
+// export const checkAuthStatus = createAsyncThunk(
+//   'userPasswordAuth/checkAuthStatus',
+//   async (_, thunkAPI) => {
+//     try {
+//       const data = await fetchCurrentUser(); // Now returns { user: ... } or { user: null } if 401 occurred
 
-      if (data && data.user) {
-        // Check if user object exists in the response
-        return {
-          user: data.user,
-          isAuthenticated: true,
-        };
-      } else {
-        // This case handles when fetchCurrentUser returned { user: null } (due to 401)
-        // or if the response structure was unexpected but not an error.
-        return {
-          user: null,
-          isAuthenticated: false,
-        };
-      }
-    } catch (error) {
-      // This catch block now only handles unexpected errors (non-401 from fetchCurrentUser)
-      // such as network errors or server-side issues other than 401.
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message ||
-          error.message ||
-          'Failed to check auth status',
-      );
-    }
-  },
-);
+//       if (data && data.user) {
+//         // Check if user object exists in the response
+//         return {
+//           user: data.user,
+//           isAuthenticated: true,
+//         };
+//       } else {
+//         // This case handles when fetchCurrentUser returned { user: null } (due to 401)
+//         // or if the response structure was unexpected but not an error.
+//         return {
+//           user: null,
+//           isAuthenticated: false,
+//         };
+//       }
+//     } catch (error) {
+//       // This catch block now only handles unexpected errors (non-401 from fetchCurrentUser)
+//       // such as network errors or server-side issues other than 401.
+//       return thunkAPI.rejectWithValue(
+//         error.response?.data?.message ||
+//           error.message ||
+//           'Failed to check auth status',
+//       );
+//     }
+//   },
+// );
 
-export const logoutUser = createAsyncThunk(
-  'userPasswordAuth/logoutUser',
-  async (_, thunkAPI) => {
-    try {
-      await clientLogout(); // Call backend to clear httpOnly cookie
-      toast.error('Logged out');
-      return; // No specific payload needed on success
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data || { message: 'Logout failed' },
-      );
-    }
-  },
-);
+// export const logoutUser = createAsyncThunk(
+//   'userPasswordAuth/logoutUser',
+//   async (_, thunkAPI) => {
+//     try {
+//       await clientLogout(); // Call backend to clear httpOnly cookie
+//       toast.error('Logged out');
+//       return; // No specific payload needed on success
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(
+//         error.response?.data || { message: 'Logout failed' },
+//       );
+//     }
+//   },
+// );
 
-export const newAccessToken = createAsyncThunk(
-  'userPasswordAuth/newAccessToken',
-  async(_, thunkAPI) => {
-    try {
-       await clientHandleRefreshToken();
-       return
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data || { message: 'Issuing new access token failed.' },
-      );
-    }
-  }
-)
+// export const newAccessToken = createAsyncThunk(
+//   'userPasswordAuth/newAccessToken',
+//   async(_, thunkAPI) => {
+//     try {
+//        await clientHandleRefreshToken();
+//        return
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(
+//         error.response?.data || { message: 'Issuing new access token failed.' },
+//       );
+//     }
+//   }
+// )
 
 const initialState = {
   // accessToken: /*JSON.parse(localStorage.getItem('accessToken')) || */null,
@@ -127,7 +128,7 @@ const userAuthSlice = createSlice({
     builder
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
+      
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -135,26 +136,22 @@ const userAuthSlice = createSlice({
         localStorage.setItem('isAuthenticated', true);
         localStorage.setItem('user', JSON.stringify(action.payload.user));
         state.user = action.payload.user;
-        state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
         state.isAuthenticated = false;
         localStorage.setItem('isAuthenticated', false);
-        state.user = null;
         localStorage.removeItem('user');
       })
 
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.error = action.null;
         state.user = action.payload;
-        //localStorage.setItem('user', JSON.stringify(action.payload));
+ 
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -162,7 +159,7 @@ const userAuthSlice = createSlice({
       })
       .addCase(checkAuthStatus.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
+        
       })
       .addCase(checkAuthStatus.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -170,7 +167,7 @@ const userAuthSlice = createSlice({
         localStorage.setItem('user', JSON.stringify(action.payload.user));
         state.isAuthenticated = action.payload.isAuthenticated;
         localStorage.setItem('isAuthenticated', action.payload.isAuthenticated);
-        state.error = null;
+        
       })
       .addCase(checkAuthStatus.rejected, (state, action) => {
         state.isLoading = false;
@@ -178,7 +175,7 @@ const userAuthSlice = createSlice({
         localStorage.setItem('isAuthenticated', false);
         localStorage.setItem('user', null);
         state.user = null;
-        state.error = action.payload;
+       
       })
       .addCase(logoutUser.pending, (state) => {
         state.isLoading = true;
@@ -186,7 +183,6 @@ const userAuthSlice = createSlice({
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.isLoading = false;
-        state.error = null;
         state.isAuthenticated = false;
         localStorage.setItem('isAuthenticated', false);
         localStorage.removeItem('user');
@@ -206,7 +202,7 @@ const userAuthSlice = createSlice({
         state.isLoading = false;
         state.isAuthenticated = true;
         localStorage.setItem('isAuthenticated', true);
-        state.error = null
+        
       })
       .addCase(newAccessToken.rejected,(state, action) => {
         state.isLoading = false;
@@ -224,7 +220,7 @@ export const { clearAuthError } = userAuthSlice.actions;
 
 export const selectIsAuthenticated = state => state.auth.isAuthenticated;
 export const selectUser = state => state.auth.user;
-export const selectAuthLoading = state => state.auth.loading;
+export const selectAuthIsLoading = state => state.auth.loading;
 export const selectAuthError = state => state.auth.error;
 
 export default userAuthSlice.reducer;

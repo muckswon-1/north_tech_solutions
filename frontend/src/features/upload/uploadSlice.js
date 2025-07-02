@@ -5,7 +5,7 @@ import { clientUpload } from "../../api/upload";
 export const uploadImage = createAsyncThunk(
     'uploads/uploadImage',
     async (imageFile, thunkAPI) => {
-        console.log(imageFile);
+       
         try {
            
             const response = await clientUpload(imageFile)

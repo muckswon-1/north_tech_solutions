@@ -19,7 +19,7 @@ export default function MainImageUploader({dialogHandler}) {
     if(!imageFile) return;
     
     try {
-      console.log(imageFile);
+    
      const response = await dispatch(uploadImage(imageFile)).unwrap();
      dispatch(setMainImageUrl(response));
 

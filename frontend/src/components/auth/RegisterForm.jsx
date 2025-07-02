@@ -2,20 +2,25 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   clearAuthError,
-  registerUser,
+ 
   selectAuthError,
-  selectAuthLoading,
+ 
+  selectAuthIsLoading,
+ 
   selectUser
 } from '../../features/auth/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import passwordSchema from '../../lib/utils'; // adjust path as needed
 import { Eye, EyeOff } from 'lucide-react';
+import { registerUser } from '../../features/auth/AuthThunks';
+
+
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const isAuthLoading = useSelector(selectAuthLoading);
+  const isAuthLoading = useSelector(selectAuthIsLoading);
   const authError = useSelector(selectAuthError);
   const user = useSelector(selectUser);
 

@@ -5,8 +5,8 @@ import { Building2, CheckCheck, AlertTriangle, Minus, Plus, Trash2 } from 'lucid
 import { toast } from 'react-hot-toast';
 
 import { selectUser } from '../../features/auth/authSlice';
-import { createInquiryDraft, updateInquiryDraftQuantity } from '../../features/userInquiryDrafts/userInquiryDraftThunks';
-import { selectCompany } from '../../features/company/companySlice';
+import { createInquiryDraft } from '../../features/userInquiryDrafts/userInquiryDraftThunks';
+import { selectCompanyVerifiedEmail } from '../../features/company/companySlice';
 import { selectUserInquiryDrafts } from '../../features/userInquiryDrafts/userInquiryDraftSlice';
 import InquiryDraftQuantity from '../inquiryDrafts/InquiryDraftQuantity';
 import { setCurrentProductDraft } from '../../features/products/productSlice';
@@ -14,20 +14,17 @@ import { setCurrentProductDraft } from '../../features/products/productSlice';
 const ProductCard = ({ product }) => {
   const authUser = useSelector(selectUser);
   const dispatch = useDispatch();
-  const currentUserCompany = useSelector(selectCompany);
   const userDraftInquiries = useSelector(selectUserInquiryDrafts);
   const navigate = useNavigate();
-
   const isInInquiryDraft = userDraftInquiries?.some((draft) => draft.productId === product.id);
   const productInquiryDraft = userDraftInquiries?.find(draft => draft.productId === product.id);
- 
-
   
+
   const { id, imageUrl, name, description, price } = product;
   
 
   const isOwner = product?.userId === authUser?.id;
-  const isVerified = currentUserCompany?.profileComplete;
+  const isVerified = useSelector(selectCompanyVerifiedEmail);
 
   const handleAddToInquiry = () => {
     try {

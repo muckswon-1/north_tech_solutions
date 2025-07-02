@@ -18,7 +18,6 @@ const NewProductForm = ({setErrorMsg, setShowForm}) => {
      const specs = useSelector(selectSpecifications);
 
 
-     console.log(product);
       
     const handleProductChange = (e) => {
         const {name, value} = e.target;

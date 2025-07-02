@@ -9,12 +9,11 @@ import InquiryDraft from './InquiryDraft';
 import { selectUserLoading } from '../../features/users/usersSlice';
 import { selectCompanyProfileComplete, selectCompanyVerifiedEmail, setCompanyProfileComplete } from '../../features/company/companySlice';
 import DraftInquiryMessage from './DraftInquiryMessage';
+import { getMyCompany } from '../../features/company/companyThunks';
 
 
 const InquiryDraftsPage = () => {
   const inquiryDrafts = useSelector(selectUserInquiryDrafts);
-
-
   const authUser = useSelector(selectUser);
  const isEmailVerified = useSelector(selectCompanyVerifiedEmail);
   const dispatch = useDispatch();
@@ -26,6 +25,7 @@ const InquiryDraftsPage = () => {
   if(authUser) {
     dispatch(fetchUserInquiryDrafts(authUser.id));
    dispatch(setUserInquiryDrafts(inquiryDrafts));
+   dispatch(getMyCompany(authUser.id));
 
   }
 

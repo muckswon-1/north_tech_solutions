@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearAuthError, loginUser } from '../../features/auth/authSlice';
+import { clearAuthError,  selectAuthError, selectAuthIsLoading, selectIsAuthenticated, selectUser } from '../../features/auth/authSlice';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { fetchUserById } from '../../features/users/usersThunks';
 import { setCurrentUser, setIsCompleteUserInfo } from '../../features/users/usersSlice';
 import { Eye, EyeOff } from 'lucide-react';
+import { fetchCurrentUser } from '../../api/passwordAuth';
+import { loginUser } from '../../features/auth/AuthThunks';
+
 
 const LoginForm = () => {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  const { loading, error, isAuthenticated, user } = useSelector((state) => state.auth);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const user = useSelector(selectUser);
+  const loading = useSelector(selectAuthIsLoading);
+  const  error = useSelector(selectAuthError);
+
 
   const [form, setForm] = useState({ email: '', password: '' });
   const navigate = useNavigate();
@@ -30,20 +37,26 @@ const LoginForm = () => {
       dispatch(setCurrentUser(userInfo));
       dispatch(setIsCompleteUserInfo(userInfo));
     } catch (err) {
-      console.error(err);
+   
       toast.error('Login failed');
     }
   };
 
   useEffect(() => {
+   
     if (isAuthenticated && user) {
       navigate(from, { replace: true });
     }
-  }, [isAuthenticated]);
+  }, [dispatch, user, isAuthenticated]);
+
+
 
   useEffect(() => {
     dispatch(clearAuthError());
   }, [location.pathname]);
+
+
+
 
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 mt-12 bg-white rounded shadow space-y-5">

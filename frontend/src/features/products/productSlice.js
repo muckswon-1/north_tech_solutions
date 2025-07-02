@@ -59,8 +59,7 @@ const productsSlice = createSlice({
             state.currentProductDraft.imageUrl = action.payload;
         },
         setAdditionalImagesUrls: (state, action) => {
-            console.log('next irl',action.payload)
-            console.log(state.currentProductDraft.additionalImagesUrls)
+            
             if(!Array.isArray(state.currentProductDraft.additionalImagesUrls)){
                 state.currentProductDraft.additionalImagesUrls = [];
             }
@@ -79,8 +78,7 @@ const productsSlice = createSlice({
        
         },
         updateSpecifications: (state, action) => {
-            console.log(action.payload);
-
+           
             const {index, field, value} = action.payload;
            
 

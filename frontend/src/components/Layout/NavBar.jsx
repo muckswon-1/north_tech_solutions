@@ -1,9 +1,9 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {  useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutUser, selectIsAuthenticated, selectUser } from '../../features/auth/authSlice'; // Import the async thunk
-import sokoniLogo from '../../assets/logo.png';
+import {  selectAuthIsLoading, selectIsAuthenticated, selectUser } from '../../features/auth/authSlice'; // Import the async thunk
 import { selectUserInquiryDrafts } from '../../features/userInquiryDrafts/userInquiryDraftSlice';
+import { logoutUser } from '../../features/auth/AuthThunks';
 
 
 const NavBar = () => {
@@ -19,8 +19,10 @@ const NavBar = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
 const sessionUser = useSelector(selectUser);
   const [showLogoutButton, setShowLogoutButton] = useState(false);
+const loading = useSelector(selectAuthIsLoading);
 
-  
+
+
   const handleLogoutButtonClick = async () => {
     
 
@@ -100,7 +102,7 @@ const sessionUser = useSelector(selectUser);
               onClick={handleLogoutButtonClick}
               className="hover:underline"
             >
-              Logout
+             {loading ? 'Logging out...' : 'Logout'}
             </button>
           ) : (
             <Link to={'/login'} className="hover:underline">
@@ -178,7 +180,7 @@ const sessionUser = useSelector(selectUser);
             <li>
               {showLogoutButton ? (
                 <button className="font-bold" onClick={handleLogoutButtonClick}>
-                  Logout
+                 {loading ? 'Logging out...' : 'Logout'}
                 </button>
               ) : (
                 <Link

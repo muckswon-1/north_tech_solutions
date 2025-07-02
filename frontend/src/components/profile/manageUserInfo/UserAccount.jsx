@@ -95,12 +95,9 @@ export default function UserAccount() {
       form.email !== initialFormData.email;
     setIsDirty(dirty);
 
-  },[authUser,form])
+  },[authUser,form]);
 
-
-console.log(isCompleteUserInfo);
-
-
+  
   return (
   
     <div className="bg-white rounded-lg shadow p-6">

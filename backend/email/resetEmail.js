@@ -1,6 +1,9 @@
 const transporter = require("./config");
 const path = require("path");
 const fs = require("fs");
+const { loadEnvfile } = require("../utils/loadEnvfile");
+
+loadEnvfile();
 
 const successHTMLTemplatePath = path.join(__dirname, "resetSuccess.html");
 const requestEmailTemplate = path.join(__dirname, "resetRequest.html");
@@ -17,7 +20,8 @@ let requestEmailContent = fs.readFileSync(requestEmailTemplate, "utf-8");
 
 
 exports.sendResetPasswordEmail =  async (email, token) => {
-    const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`
+    const resetLink = `${process.env.DEV_FRONTEND_URL}/reset-password/${token}`
+    console.log(resetLink);
     const finalContent = requestEmailContent.replace('{{RESET_LINK}}', resetLink);
 
     await transporter.sendMail({
@@ -29,7 +33,7 @@ exports.sendResetPasswordEmail =  async (email, token) => {
 }
 
 exports.sendPasswordResetSuccessEmail = async (email) => {
-    const loginLink = `${process.env.FRONTEND_URL}/login`
+    const loginLink = `${process.env.DEV_FRONTEND_URL}/login`
     const finalContent = successHTMLContent.replace('{{LOGIN_LINK}}', loginLink);
 
     await transporter.sendMail({

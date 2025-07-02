@@ -22,7 +22,7 @@ const AdditionalImageUploader = () => {
       const response = await dispatch(uploadImage(file)).unwrap();
      
       dispatch(setAdditionalImagesUrls(response));
-      //dispatch(resetUploadState());
+     
       console.log('after additional images url')
     
       } catch (error) {
@@ -42,8 +42,6 @@ const AdditionalImageUploader = () => {
   };
 
   const openFileDialog = () => fileInputRef.current.click();
-
-  console.log(additionalImagesUrls);
 
 
 

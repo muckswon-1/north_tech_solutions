@@ -16,23 +16,7 @@ const EditListingView = ({setEditIndex}) => {
     const fileInputRef = useRef();
     const currentUser = useSelector(selectUser);
    const draft = useSelector(selectCurrentProductDraft);
-   
-   console.log(draft);
 
-
-  // const handleImageUpload = async (e) => {
-  //   const file = e.target.files[0];
-  //   if (!file) return;
-
-  //   try {
-  //     const response = await dispatch(uploadImage(file)).unwrap();
-
-  //     toast.success("Main image updated!");
-  //   } catch (err) {
-  //     console.log(err);
-  //     toast.error("Failed to upload image");
-  //   }
-  // };
 
   const handleChange = (e) => {
     const {name, value} = e.target;
@@ -40,8 +24,7 @@ const EditListingView = ({setEditIndex}) => {
  };
 
 
-
-    const handleSave = async () => {
+ const handleSave = async () => {
         try {
           console.log(draft);
           console.log(currentUser);
@@ -73,11 +56,7 @@ const EditListingView = ({setEditIndex}) => {
         )
       }
     
-    
-
-
-
-
+  
 
     return (
         <>
@@ -105,65 +84,6 @@ const EditListingView = ({setEditIndex}) => {
 
         <MainImageUploader dialogHandler={editMainImageUpdateDialogueHandler} />
         <AdditionalImageUploader />
-
-        {/* Main image update */}
-        {/* <div className="mb-2">
-          <label className="block text-sm font-medium mb-1">Main Image</label>
-          {editedProduct.imageUrl ? (
-            <img src={editedProduct.imageUrl} alt={prod.name} className="h-24 rounded mb-2" />
-          ) : (
-            <p className="text-gray-400">No image uploaded</p>
-          )}
-          <button
-            className="text-blue-600 hover:underline text-sm"
-            onClick={openFileDialog}
-          >
-            Replace Image
-          </button>
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleImageUpload}
-            className="hidden"
-          /> }
-        
-      
-        </div>
-
-
-
-        {/* Additional Images Placeholder */}
-
-        {/* {additionalImagesUrls?.length > 0 &&  (
-          <div className="mb-3">
-            <label className="block text-sm font-medium mb-1">Additional Images</label>
-            <div className="flex flex-wrap gap-2">
-              {additionalImagesUrls.map((url, i) => (
-                <div key={i} className="relative group">
-                  <img
-                    src={url}
-                    alt={`Additional ${i + 1}`}
-                    className="h-20 w-20 object-cover rounded border"
-                  />
-                  <button
-                    className="absolute top-0 right-0 text-xs text-red-600 bg-white rounded-full p-1 hidden group-hover:block"
-                    onClick={() => console.log("Delete image", url)}
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
-            </div>
-            <button
-              className="text-blue-600 hover:underline text-sm mt-1"
-              onClick={() => console.log("Add new additional image")}
-            >
-              + Add Image
-            </button>
-          </div>
-        ) } */}
-
-        {/* Save and Cancel Buttons */}
 
         <div className="flex gap-3 mt-4">
           <button

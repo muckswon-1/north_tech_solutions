@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
-import { checkAuthStatus, selectIsAuthenticated, selectUser } from '../../features/auth/authSlice';
+import {  selectIsAuthenticated, selectUser } from '../../features/auth/authSlice';
 
 const RequireAuth = ({ children }) => {
   
