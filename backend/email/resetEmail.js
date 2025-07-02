@@ -18,10 +18,22 @@ let requestEmailContent = fs.readFileSync(requestEmailTemplate, "utf-8");
  */
 
 
+const mode = process.env.NODE_ENV
+let frontEndLink
 
-exports.sendResetPasswordEmail =  async (email, token) => {
-    const resetLink = `${process.env.DEV_FRONTEND_URL}/reset-password/${token}`
-    console.log(resetLink);
+if (mode === "development") {
+    frontEndLink = process.env.DEV_FRONTEND_URL
+} else if (mode === "staging") {
+    frontEndLink = process.env.STAGING_FRONTEND_URL
+} else if (mode === "production") {
+    frontEndLink = process.env.FRONTEND_URL
+}
+
+
+exports.sendResetPasswordEmail = async (email, token) => {
+
+    const resetLink = `${frontEndLink}/reset-password/${token}`
+
     const finalContent = requestEmailContent.replace('{{RESET_LINK}}', resetLink);
 
     await transporter.sendMail({
@@ -29,11 +41,11 @@ exports.sendResetPasswordEmail =  async (email, token) => {
         to: email,
         subject: "Your Sokoni B2B Verification Code",
         html: finalContent
-      });
+    });
 }
 
 exports.sendPasswordResetSuccessEmail = async (email) => {
-    const loginLink = `${process.env.DEV_FRONTEND_URL}/login`
+    const loginLink = `${frontEndLink}/login`
     const finalContent = successHTMLContent.replace('{{LOGIN_LINK}}', loginLink);
 
     await transporter.sendMail({
@@ -41,6 +53,6 @@ exports.sendPasswordResetSuccessEmail = async (email) => {
         to: email,
         subject: "Password Reset Successful",
         html: finalContent
-      
+
     });
 }
