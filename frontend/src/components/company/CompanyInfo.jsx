@@ -16,7 +16,7 @@ const CompanyInfo = () => {
     const authUser = useSelector(selectUser);
     const [isEditing, setIsEditing] = useState(false);
     const [isDirty, setIsDirty] = useState(false);
-    const isVerifiedEmail = useSelector(selectCompanyVerifiedEmail)
+    const isVerifiedEmail = useSelector(selectCompanyVerifiedEmail);
     
 
 
@@ -137,9 +137,6 @@ const CompanyInfo = () => {
             {!isVerifiedEmail && 
             <li>Email address is not verified.</li>
            
-            }
-            {!isVerifiedPhone &&
-            <li>Phone number is not verified.</li>
             }
           </ul>
           <Link to={`/${authUser.id}/verification-center`} className="text-blue-600 hover:underline">Please verify these details in your profile settings to unlock full features.</Link>
